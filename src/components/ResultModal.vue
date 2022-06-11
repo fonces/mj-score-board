@@ -14,7 +14,7 @@
           <div class="form-name">チップ</div>
           <div class="form-group">
             <label>1枚:</label>
-            <TextInput v-model.number="model.chip" type="tel" @blur="onBlur('chip', 5000)" />
+            <TextInput v-model.number="model.chipRate" type="tel" @blur="onBlur('chipRate', 5000)" />
             <label>点相当</label>
           </div>
         </div>
@@ -59,11 +59,21 @@ export default {
       type: Array,
       required: true,
     },
+    chips: {
+      type: Array,
+      required: true,
+    },
+    chipRate: {
+      type: Number,
+      required: true,
+    },
   },
   setup(props, { emit }) {
-    const model = reactive({ rate: 50, chip: 5000 })
+    const model = reactive({ rate: 50, chipRate: props.chipRate })
     const toPrice = (i) => {
-      const score = props.scores.reduce((acc, score) => acc + score[i], 0)
+      const score = props.scores.reduce((acc, score) => (
+        acc + score[i] + (props.chips[i] * (model.chipRate / 1000))
+      ), 0)
       return Number(score * model.rate).toLocaleString()
     }
 

@@ -10,6 +10,7 @@
       v-for="(score, i) in model.scores"
       :key="i"
       class="score"
+      :class="{ diff: isDifference(score) }"
       @click="(modal.score = true) && (model.scoreIndex = i)"
     >
       <th>{{ i + 1 }}回戦</th>
@@ -17,7 +18,13 @@
         {{ toPosiNega(value) }}
       </td>
     </tr>
-    <tr class="summary" @click="modal.result = true">
+    <tr class="chip" :class="{ diff: isDifference(model.chips) }" @click="modal.chip = true">
+      <th>チップ</th>
+      <td v-for="(chip, i) in model.chips" :key="i">
+        {{ 0 <= chip ? '+' : '-' }}{{ Math.abs(chip) }}枚
+      </td>
+    </tr>
+    <tr class="summary" :class="{ diff: isDifference(summaries) }" @click="modal.result = true">
       <th>合計</th>
       <td v-for="(summary, i) in summaries" :key="i">
         {{ toPosiNega(summary) }}
@@ -38,10 +45,20 @@
       @save="onSaveEditScore"
       @close="modal.score = false"
     />
+    <EditChipModal
+      v-if="modal.chip"
+      :players="model.players"
+      :chips="model.chips"
+      :chip-rate="model.chipRate"
+      @save="onSaveEditChip"
+      @close="modal.chip = false"
+    />
     <ResultModal
       v-if="modal.result"
       :players="model.players"
       :scores="model.scores"
+      :chips="model.chips"
+      :chip-rate="model.chipRate"
       @reset="onReset"
       @close="modal.result = false"
     />
@@ -52,13 +69,17 @@
 import { reactive, computed, watch } from 'vue'
 import { fill } from '@/utils/array'
 import { toPosiNega } from '@/utils/string'
+import { isDifference } from '@/utils/validator'
 import EditPlayerModal from '@/components/EditPlayerModal.vue'
 import EditScoreModal from '@/components/EditScoreModal.vue'
+import EditChipModal from '@/components/EditChipModal.vue'
 import ResultModal from '@/components/ResultModal.vue'
 
 const createDefault = () => ({
   players: fill(4).map((_, i) => `プレイヤー${i + 1}`),
   scores: [fill(4)],
+  chips: fill(4),
+  chipRate: 5000,
 })
 
 export default {
@@ -66,6 +87,7 @@ export default {
   components: {
     EditPlayerModal,
     EditScoreModal,
+    EditChipModal,
     ResultModal,
   },
   setup() {
@@ -77,16 +99,19 @@ export default {
         [-14, 6, -43, 51],
         [0, 0, 0, 0],
       ],
+      chips: [5, 3, -5, -3],
+      chipRate: 5000,
     })
     const modal = reactive({
       player: false,
       score: false,
+      chip: false,
       result: false,
       scoreIndex: null,
     })
     const summariesRef = computed(() => (
       model.scores.reduce(
-        (acc, score) => score.map((s, j) => acc[j] += s),
+        (acc, score) => score.map((s, j) => acc[j] += (s + (model.chips[j] * (model.chipRate / 1000)))),
         fill(model.players.length),
       )
     ))
@@ -102,22 +127,20 @@ export default {
 
     return {
       toPosiNega,
+      isDifference,
       model,
       modal,
       summaries: summariesRef,
-      onReset: () => {
-        const { players, scores } = createDefault()
-        model.players = players
-        model.scores = scores
-        modal.result = false
-      },
       onSaveEditPlayer: ({ players, deleted }) => {
-        model.scores = model.scores.map(score => score.filter((_, j) => !deleted.includes(j)))
         model.players = players.filter((_, i) => !deleted.includes(i))
+        model.scores = model.scores.map(score => score.filter((_, j) => !deleted.includes(j)))
+        model.chips = model.chips.filter((_, j) => !deleted.includes(j))
 
         const diff = model.players.length - model.scores[0].length
-        if (0 < diff)
+        if (0 < diff) {
           model.scores = model.scores.map(score => [...score, ...fill(diff)])
+          model.chips = [...model.chips, ...fill(diff)]
+        }
 
         modal.player = false
       },
@@ -126,6 +149,19 @@ export default {
         model.scoreIndex = null
         modal.score = false
       }),
+      onSaveEditChip: (({ chips, chipRate }) => {
+        model.chips = chips
+        model.chipRate = chipRate
+        modal.chip = false
+      }),
+      onReset: () => {
+        const { players, scores, chips, chipRate } = createDefault()
+        model.players = players
+        model.scores = scores
+        model.chips = chips
+        model.chipRate = chipRate
+        modal.result = false
+      },
     }
   }
 }
@@ -160,6 +196,10 @@ th:first-child {
   border-right-width: 2px;
   min-width: 88px;
   width: 88px;
+}
+
+tr.diff {
+  background: #ffcccc;
 }
 
 .player th {
