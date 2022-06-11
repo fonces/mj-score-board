@@ -6,7 +6,7 @@
     v-bind="$attrs"
     :value="modelValue"
     @input="$emit('update:modelValue', $event.target.value)"
-    @focus="onFocus"
+    @focus="$attrs.type !== 'number' && onFocus"
   />
 </template>
 
@@ -38,7 +38,8 @@ export default {
   padding: 8px;
 }
 
-.text-input[type="tel"] {
+.text-input[type="tel"],
+.text-input[type="number"] {
   text-align: right;
 }
 

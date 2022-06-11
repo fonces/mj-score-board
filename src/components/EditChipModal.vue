@@ -14,7 +14,7 @@
         <div v-for="(player, i) in players" :key="i" class="item">
           <div class="name">{{ player }}</div>
           <div class="form-field">
-            <TextInput v-model.number="model.chips[i]" type="tel" @blur="onBlur(i)" />
+            <TextInput v-model.number="model.chips[i]" type="number" @blur="onBlur(i)" />
             <label>枚</label>
             <Button
               v-if="model.chips[i] === 0 && isDifference(model.chips)"
