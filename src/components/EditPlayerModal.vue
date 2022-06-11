@@ -1,9 +1,6 @@
 <template>
   <ModalBase class="edit-player-modal" title="ユーザー編集" @close="onClose">
     <div class="container">
-      <div class="actions">
-        <Button @click="onReset">リセット</Button>
-      </div>
       <div class="list">
         <div v-for="(player, i) in model.players" :key="i" class="item">
           <TextInput
@@ -63,7 +60,6 @@ export default {
       model,
       isLastIndex: i => i === lastIndexRef.value,
       onDelete: i => (model.deleted = [...model.deleted, i]),
-      onReset: () => emit('reset'),
       onClose: () => emit('close'),
       onSave: () => emit('save', {
         players: 4 < model.players.length ? [...model.players].slice(0, -1) : [...model.players],

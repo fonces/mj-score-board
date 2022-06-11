@@ -12,12 +12,12 @@
       class="score"
       @click="(modal.score = true) && (model.scoreIndex = i)"
     >
-      <th>{{ i }}回戦</th>
+      <th>{{ i + 1 }}回戦</th>
       <td v-for="(value, j) in score" :key="j">
         {{ toPosiNega(value) }}
       </td>
     </tr>
-    <tr class="summary">
+    <tr class="summary" @click="modal.result = true">
       <th>合計</th>
       <td v-for="(summary, i) in summaries" :key="i">
         {{ toPosiNega(summary) }}
@@ -28,7 +28,6 @@
     <EditPlayerModal
       v-if="modal.player"
       :players="model.players"
-      @reset="onReset"
       @save="onSaveEditPlayer"
       @close="modal.player = false"
     />
@@ -39,6 +38,13 @@
       @save="onSaveEditScore"
       @close="modal.score = false"
     />
+    <ResultModal
+      v-if="modal.result"
+      :players="model.players"
+      :scores="model.scores"
+      @reset="onReset"
+      @close="modal.result = false"
+    />
   </teleport>
 </template>
 
@@ -48,12 +54,19 @@ import { fill } from '@/utils/array'
 import { toPosiNega } from '@/utils/string'
 import EditPlayerModal from '@/components/EditPlayerModal.vue'
 import EditScoreModal from '@/components/EditScoreModal.vue'
+import ResultModal from '@/components/ResultModal.vue'
+
+const createDefault = () => ({
+  players: fill(4).map((_, i) => `プレイヤー${i + 1}`),
+  scores: [fill(4)],
+})
 
 export default {
   name: 'ScoreTable',
   components: {
     EditPlayerModal,
     EditScoreModal,
+    ResultModal,
   },
   setup() {
     const model = reactive({
@@ -68,6 +81,7 @@ export default {
     const modal = reactive({
       player: false,
       score: false,
+      result: false,
       scoreIndex: null,
     })
     const summariesRef = computed(() => (
@@ -92,9 +106,10 @@ export default {
       modal,
       summaries: summariesRef,
       onReset: () => {
-        model.players = fill(4).map((_, i) => `プレイヤー${i + 1}`)
-        model.scores = [fill(4)]
-        modal.player = false
+        const { players, scores } = createDefault()
+        model.players = players
+        model.scores = scores
+        modal.result = false
       },
       onSaveEditPlayer: ({ players, deleted }) => {
         model.scores = model.scores.map(score => score.filter((_, j) => !deleted.includes(j)))
