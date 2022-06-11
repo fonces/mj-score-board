@@ -1,5 +1,5 @@
 <template>
-  <ModalBase class="edit-score-modal" title="スコア編集" @close="onClose">
+  <ModalBase class="edit-score-modal" :title="`スコア編集 - ${scoreIndex}回戦`" @close="onClose">
     <div class="container">
       <div class="actions">
         <Button @click="onClear">クリア</Button>
@@ -53,6 +53,10 @@ export default {
       type: Array,
       required: true,
     },
+    scoreIndex: {
+      typpe: Number,
+      required: true,
+    }
   },
   setup(props, { emit }) {
     const model = reactive({

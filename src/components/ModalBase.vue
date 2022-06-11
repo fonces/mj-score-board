@@ -25,19 +25,24 @@ export default {
     title: {
       type: String,
     }
-  }
+  },
 }
 </script>
 
 <style lang="postcss" scoped>
 .modal-base {
   background: #fafafa;
-  position: absolute;
+  position: fixed;
   top: 0;
   height: 100%;
   width: 100%;
   overflow: scroll;
-  z-index: 1;
+  overscroll-behavior: contain;
+  z-index: 999;
+}
+
+.modal-base::-webkit-scrollbar {
+  display:none;
 }
 
 header, footer {
@@ -49,7 +54,7 @@ header, footer {
   justify-content: center;
   position: fixed;
   width: 100%;
-  z-index: 1;
+  z-index: 2;
 }
 
 header {
@@ -78,5 +83,9 @@ footer {
   font-weight: bold;
   margin-left: 24px;
   text-align: center;
+}
+
+.cross {
+  cursor: pointer;
 }
 </style>

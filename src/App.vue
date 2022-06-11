@@ -15,14 +15,10 @@ export default {
 </script>
 
 <style>
-body {
-  position: relative;
-}
-
 #app {
   overflow: scroll;
+  height: 100vh;
 }
-
 
 #app::-webkit-scrollbar {
   display:none;

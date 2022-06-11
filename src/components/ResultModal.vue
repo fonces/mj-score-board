@@ -28,6 +28,10 @@
             </div>
           </div>
         </div>
+        <div class="item">
+          <div class="form-name">その他</div>
+          <Button @click="onShare">シェア</Button>
+        </div>
       </div>
     </div>
     <template #footer>
@@ -38,7 +42,8 @@
 </template>
 
 <script>
-import { reactive } from 'vue'
+import { reactive, computed } from 'vue'
+import { v4 as uuid } from 'uuid'
 import ModalBase from '@/components/ModalBase.vue'
 import Button from '@/components/Button.vue'
 import TextInput from '@/components/TextInput.vue'
@@ -70,6 +75,8 @@ export default {
   },
   setup(props, { emit }) {
     const model = reactive({ rate: 50, chipRate: props.chipRate })
+    const sheableRef = computed(() => typeof navigator.share !== 'undefined')
+
     const toPrice = (i) => {
       const score = props.scores.reduce((acc, score) => (
         acc + score[i] + (props.chips[i] * (model.chipRate / 1000))
@@ -79,8 +86,32 @@ export default {
 
     return {
       model,
+      sheable: sheableRef,
       toPrice,
       onBlur: (type, defaultValue) => !Number.isInteger(model[type]) && (model[type] = defaultValue),
+      onShare: () => {
+        const url = new URL('/', location.href)
+        url.searchParams.set('id', uuid())
+        url.searchParams.set('datetime', new Date().getTime())
+        url.searchParams.set('players', props.players)
+        url.searchParams.set('scores', props.scores)
+        url.searchParams.set('chips', props.chips)
+
+        if (typeof navigator.share === 'undefined') {
+          if (navigator.clipboard) {
+            navigator.clipboard.writeText(url.toString())
+            alert('コピーしました')
+          } else {
+            alert('お使いのブラウザにはクリップボード機能がありません。')
+          }
+        } else {
+          navigator.share({
+            title: '麻雀スコア',
+            text: '',
+            url: url.toString(),
+          })
+        }
+      },
       onReset: () => emit('reset'),
       onClose: () => emit('close'),
       onSave: () => {},
