@@ -90,7 +90,7 @@ export default {
       toPrice,
       onBlur: (type, defaultValue) => !Number.isInteger(model[type]) && (model[type] = defaultValue),
       onShare: () => {
-        const url = new URL('/', location.href)
+        const url = new URL(location.pathname, location.href)
         url.searchParams.set('id', uuid())
         url.searchParams.set('datetime', new Date().getTime())
         url.searchParams.set('players', props.players)
