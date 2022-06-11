@@ -1,26 +1,30 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <ScoreTable />
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import '@/reset.css'
+import ScoreTable from '@/components/ScoreTable.vue'
 
 export default {
   name: 'App',
   components: {
-    HelloWorld
-  }
+    ScoreTable,
+  },
 }
 </script>
 
 <style>
+body {
+  position: relative;
+}
+
 #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+  overflow: scroll;
+}
+
+
+#app::-webkit-scrollbar {
+  display:none;
 }
 </style>

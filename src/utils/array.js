@@ -1,0 +1,1 @@
+export const fill = (len, value = 0) => Array(len).fill(value)
