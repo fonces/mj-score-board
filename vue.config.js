@@ -6,5 +6,8 @@ module.exports = defineConfig({
       title: '麻雀スコア',
     }
   },
+  publicPath: process.env.NODE_ENV === 'production'
+    ? '/mj-score-board/'
+    : '/',
   transpileDependencies: true,
 })
