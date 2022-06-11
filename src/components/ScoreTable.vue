@@ -137,7 +137,7 @@ export default {
       try {
         const params = (new URL(document.location)).searchParams
         if (params.get('id')) {
-          isReadOnlyRef.value = !JSON.parse(params.get('shareble'))
+          isReadOnlyRef.value = !JSON.parse(params.get('editable'))
           const item = [...params].reduce((acc, [key, value]) => ({ ...acc, [key]: value }), {})
           const scores = item.scores.split(',')
           const players = item.players.split(',')
@@ -305,7 +305,6 @@ tbody tr:first-child td {
 
 .summary td,
 .summary th {
-  cursor: default;
   font-size: 20px;
   font-weight: bold;
 }

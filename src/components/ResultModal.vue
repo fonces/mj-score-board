@@ -32,7 +32,7 @@
           <div class="form-name">その他</div>
           <div class="share">
             <label>編集を許可する</label>
-            <Switch v-model="shareble" name="shareble" />
+            <Switch v-model="editable" name="editable" />
             <Button @click="onShare">シェア</Button>
           </div>
         </div>
@@ -81,7 +81,7 @@ export default {
   },
   setup(props, { emit }) {
     const model = reactive({ rate: 50, chipRate: props.chipRate })
-    const sharebleRef = ref(false)
+    const editableRef = ref(false)
 
     const toPrice = (i) => {
       const score = props.scores.reduce((acc, score) => (
@@ -92,14 +92,14 @@ export default {
 
     return {
       model,
-      shareble: sharebleRef,
+      editable: editableRef,
       toPrice,
       onBlur: (type, defaultValue) => !Number.isInteger(model[type]) && (model[type] = defaultValue),
       onShare: () => {
         const url = new URL(location.pathname, location.href)
         url.searchParams.set('id', uuid())
         url.searchParams.set('datetime', new Date().getTime())
-        url.searchParams.set('shareble', sharebleRef.value)
+        url.searchParams.set('editable', editableRef.value)
         url.searchParams.set('players', props.players)
         url.searchParams.set('scores', props.scores)
         url.searchParams.set('chips', props.chips)
