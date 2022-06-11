@@ -9,7 +9,7 @@
         <div v-for="(player, i) in players" :key="i" class="item">
           <div class="name">{{ player }}</div>
           <div class="form-field">
-            <TextInput v-model.number="model.score[i]" type="number" @blur="onBlur(i)" />
+            <TextInput v-model.number="model.score[i]" @blur="onBlur(i)" />
             <Button
               v-if="model.score[i] === 0 && isDifference(model.score)"
               small
@@ -116,5 +116,9 @@ export default {
   gap: 8px;
   grid-auto-flow: column;
   grid-template-columns: 1fr max-content;
+}
+
+.text-input {
+  text-align: right;
 }
 </style>

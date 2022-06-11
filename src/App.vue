@@ -15,6 +15,10 @@ export default {
 </script>
 
 <style>
+html {
+  background: #DEB887;
+}
+
 #app {
   overflow: scroll;
   height: 100vh;

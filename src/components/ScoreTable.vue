@@ -228,6 +228,7 @@ export default {
 table {
   border-collapse: separate;
 	border-spacing: 0;
+  border-left: 1px solid #0099FF;
   border-bottom: 1px solid #0099FF;
   min-width: 100%;
 }

@@ -14,7 +14,7 @@
         <div v-for="(player, i) in players" :key="i" class="item">
           <div class="name">{{ player }}</div>
           <div class="form-field">
-            <TextInput v-model.number="model.chips[i]" type="number" @blur="onBlur(i)" />
+            <TextInput v-model.number="model.chips[i]" @blur="onBlur(i)" />
             <label>枚</label>
             <Button
               v-if="model.chips[i] === 0 && isDifference(model.chips)"
@@ -80,7 +80,7 @@ export default {
       onAutoComplete: i => model.chips[i] -= diffRef.value,
       onClear: () => model.chips = fill(props.players.length),
       onClose: () => emit('close'),
-      onSave: () => emit('save', { chips: [...model.chips] }),
+      onSave: () => emit('save', { ...model, chips: [...model.chips] }),
     }
   }
 }
@@ -129,5 +129,9 @@ export default {
 
 .chip-rate {
   grid-template-columns: max-content 1fr max-content;
+}
+
+.text-input {
+  text-align: right;
 }
 </style>

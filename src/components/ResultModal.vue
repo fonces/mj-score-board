@@ -14,7 +14,7 @@
           <div class="form-name">チップ</div>
           <div class="form-group">
             <label>1枚:</label>
-            <TextInput v-model.number="model.chipRate" type="tel" @blur="onBlur('chipRate', 5000)" />
+            <TextInput v-model.number="model.chipRate" @blur="onBlur('chipRate', 5000)" />
             <label>点相当</label>
           </div>
         </div>
@@ -168,5 +168,9 @@ export default {
   gap: 16px;
   grid-auto-flow: column;
   grid-template-columns: max-content 1fr max-content;
+}
+
+.text-input {
+  text-align: right;
 }
 </style>

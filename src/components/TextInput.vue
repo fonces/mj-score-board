@@ -6,7 +6,7 @@
     v-bind="$attrs"
     :value="modelValue"
     @input="$emit('update:modelValue', $event.target.value)"
-    @focus="$attrs.type !== 'number' && onFocus"
+    @focus="onFocus"
   />
 </template>
 

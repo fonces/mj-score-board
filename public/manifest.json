@@ -1,0 +1,10 @@
+{
+  "name": "麻雀スコアボード",
+  "short_name": "すこあぼ",
+  "description": "麻雀のスコアを記録するウェブアプリ",
+  "start_url": "/mj-score-board",
+  "display": "fullscreen",
+  "orientation": "any",
+  "background_color": "#DEB887",
+  "theme_color": "#DEB887"
+}
