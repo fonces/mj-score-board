@@ -85,8 +85,8 @@ export default {
 
     const toPrice = (i) => {
       const score = props.scores.reduce((acc, score) => (
-        acc + score[i] + (props.chips[i] * (model.chipRate / 1000))
-      ), 0)
+        acc + score[i]
+      ), 0) + (props.chips[i] * (model.chipRate / 1000))
       return Number(score * model.rate).toLocaleString()
     }
 

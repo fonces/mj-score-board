@@ -116,9 +116,9 @@ export default {
     })
     const summariesRef = computed(() => (
       model.scores.reduce(
-        (acc, score) => score.map((s, j) => acc[j] += (s + (model.chips[j] * (model.chipRate / 1000)))),
+        (acc, score) => score.map((s, j) => acc[j] += s),
         fill(model.players.length),
-      )
+      ).map((s, i) => s + (model.chips[i] * (model.chipRate / 1000)))
     ))
     const lastScoreRef = computed(() => model.scores[model.scores.length - 1])
 
