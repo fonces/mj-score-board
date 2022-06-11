@@ -137,7 +137,7 @@ export default {
       try {
         const params = (new URL(document.location)).searchParams
         if (params.get('id')) {
-          isReadOnlyRef.value = true
+          isReadOnlyRef.value = !JSON.parse(params.get('shareble'))
           const item = [...params].reduce((acc, [key, value]) => ({ ...acc, [key]: value }), {})
           const scores = item.scores.split(',')
           const players = item.players.split(',')

@@ -30,7 +30,11 @@
         </div>
         <div class="item">
           <div class="form-name">その他</div>
-          <Button @click="onShare">シェア</Button>
+          <div class="share">
+            <label>編集を許可する</label>
+            <Switch v-model="shareble" name="shareble" />
+            <Button @click="onShare">シェア</Button>
+          </div>
         </div>
       </div>
     </div>
@@ -42,11 +46,12 @@
 </template>
 
 <script>
-import { reactive, computed } from 'vue'
+import { reactive, ref } from 'vue'
 import { v4 as uuid } from 'uuid'
 import ModalBase from '@/components/ModalBase.vue'
 import Button from '@/components/Button.vue'
 import TextInput from '@/components/TextInput.vue'
+import Switch from '@/components/Switch.vue'
 
 export default {
   name: 'ResultModal',
@@ -54,6 +59,7 @@ export default {
     Button,
     ModalBase,
     TextInput,
+    Switch,
   },
   props: {
     players: {
@@ -75,7 +81,7 @@ export default {
   },
   setup(props, { emit }) {
     const model = reactive({ rate: 50, chipRate: props.chipRate })
-    const sheableRef = computed(() => typeof navigator.share !== 'undefined')
+    const sharebleRef = ref(false)
 
     const toPrice = (i) => {
       const score = props.scores.reduce((acc, score) => (
@@ -86,13 +92,14 @@ export default {
 
     return {
       model,
-      sheable: sheableRef,
+      shareble: sharebleRef,
       toPrice,
       onBlur: (type, defaultValue) => !Number.isInteger(model[type]) && (model[type] = defaultValue),
       onShare: () => {
         const url = new URL(location.pathname, location.href)
         url.searchParams.set('id', uuid())
         url.searchParams.set('datetime', new Date().getTime())
+        url.searchParams.set('shareble', sharebleRef.value)
         url.searchParams.set('players', props.players)
         url.searchParams.set('scores', props.scores)
         url.searchParams.set('chips', props.chips)
@@ -153,5 +160,13 @@ export default {
   display: flex;
   flex-direction: row-reverse;
   justify-content: space-between;
+}
+
+.share {
+  align-items: center;
+  display: grid;
+  gap: 16px;
+  grid-auto-flow: column;
+  grid-template-columns: max-content 1fr max-content;
 }
 </style>
