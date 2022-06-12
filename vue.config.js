@@ -3,7 +3,7 @@ module.exports = defineConfig({
   pages: {
     index: {
       entry: 'src/main.js',
-      title: '麻雀スコア',
+      title: '麻雀スコアボード',
     }
   },
   publicPath: process.env.NODE_ENV === 'production'

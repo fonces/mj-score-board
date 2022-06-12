@@ -3,8 +3,8 @@
 </template>
 
 <script>
-import '@/reset.css'
-import '@/root.css'
+import '@/assets/reset.css'
+import '@/assets/root.css'
 import ScoreTable from '@/components/ScoreTable.vue'
 
 export default {
