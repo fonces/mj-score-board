@@ -7,9 +7,9 @@
       </div>
       <List>
         <Item v-for="(player, i) in players" :key="i">
-          <div class="name">{{ player }}</div>
+          <SectionTitle>{{ player }}</SectionTitle>
           <div class="form-field">
-            <TextInput v-model.number="model.score[i]" @blur="onBlur(i)" />
+            <TextInput v-model.number="model.score[i]" align="right" @blur="onBlur(i)" />
             <Button
               v-if="model.score[i] === 0 && isDifference(model.score)"
               small
@@ -35,6 +35,7 @@ import { fill } from '@/utils/array'
 import { isDifference } from '@/utils/validator'
 import Button from '@/components/atoms/Button.vue'
 import TextInput from '@/components/atoms/TextInput.vue'
+import SectionTitle from '@/components/atoms/SectionTitle.vue'
 import List from '@/components/atoms/List.vue'
 import Item from '@/components/atoms/Item.vue'
 import ModalBase from '@/components/molecules/ModalBase.vue'
@@ -44,6 +45,7 @@ export default {
   components: {
     Button,
     TextInput,
+    SectionTitle,
     List,
     Item,
     ModalBase,
@@ -94,18 +96,10 @@ export default {
   font-weight: bold;
 }
 
-.name {
-  font-weight: bold;
-}
-
 .form-field {
   display: grid;
   gap: 8px;
   grid-auto-flow: column;
   grid-template-columns: 1fr max-content;
-}
-
-.text-input {
-  text-align: right;
 }
 </style>

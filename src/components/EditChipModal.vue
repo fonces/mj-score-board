@@ -7,14 +7,14 @@
       </div>
       <div class="form-field chip-rate">
         <label>チップ1枚</label>
-        <TextInput v-model.number="model.chipRate" type="tel" @blur="onBlurChipRate" />
+        <TextInput v-model.number="model.chipRate" type="tel" align="right" @blur="onBlurChipRate" />
         <label>点相当</label>
       </div>
       <List>
         <Item v-for="(player, i) in players" :key="i">
-          <div class="name">{{ player }}</div>
+          <SectionTitle>{{ player }}</SectionTitle>
           <div class="form-field">
-            <TextInput v-model.number="model.chips[i]" @blur="onBlur(i)" />
+            <TextInput v-model.number="model.chips[i]" align="right" @blur="onBlur(i)" />
             <label>枚</label>
             <Button
               v-if="model.chips[i] === 0 && isDifference(model.chips)"
@@ -41,6 +41,7 @@ import { fill } from '@/utils/array'
 import { isDifference } from '@/utils/validator'
 import Button from '@/components/atoms/Button.vue'
 import TextInput from '@/components/atoms/TextInput.vue'
+import SectionTitle from '@/components/atoms/SectionTitle.vue'
 import List from '@/components/atoms/List.vue'
 import Item from '@/components/atoms/Item.vue'
 import ModalBase from '@/components/molecules/ModalBase.vue'
@@ -50,6 +51,7 @@ export default {
   components: {
     Button,
     TextInput,
+    SectionTitle,
     List,
     Item,
     ModalBase,
@@ -101,10 +103,6 @@ export default {
 .error {
   color: var(--error);
   font-size: 13px;
-  font-weight: bold;
-}
-
-.name {
   font-weight: bold;
 }
 

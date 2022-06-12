@@ -3,25 +3,25 @@
     <List gap="24px">
       <List gap="24px">
         <Item>
-          <div class="form-name">レート</div>
+          <SectionTitle>レート</SectionTitle>
           <div class="form-group">
             <label>1000点:</label>
-            <TextInput v-model.number="model.rate" type="tel" class="text-right" @blur="onBlur" />
+            <TextInput v-model.number="model.rate" type="tel" align="right" @blur="onBlur" />
             <label>円</label>
           </div>
         </Item>
         <Item>
-          <div class="form-name">チップ</div>
+          <SectionTitle>チップ</SectionTitle>
           <div class="form-group">
             <label>1枚:</label>
-            <TextInput v-model.number="model.chipRate" class="text-right" @blur="onBlurChipRate" />
+            <TextInput v-model.number="model.chipRate" align="right" @blur="onBlurChipRate" />
             <label>点相当</label>
           </div>
         </Item>
         <Item>
-          <div class="form-name">結果</div>
+          <SectionTitle>結果</SectionTitle>
           <List>
-            <div v-for="(player, i) in players"  :key="i" class="form-group">
+            <div v-for="(player, i) in players" :key="i" class="form-group">
               <label>{{ player }}</label>
               <div />
               <label>{{ toPrice(i) }}円</label>
@@ -29,7 +29,7 @@
           </List>
         </Item>
         <Item>
-          <div class="form-name">その他</div>
+          <SectionTitle>その他</SectionTitle>
           <div class="share">
             <label>編集を許可する</label>
             <Switch v-model="editable" name="editable" />
@@ -56,6 +56,7 @@ import html2canvas from 'html2canvas'
 import Button from '@/components/atoms/Button.vue'
 import TextInput from '@/components/atoms/TextInput.vue'
 import Switch from '@/components/atoms/Switch.vue'
+import SectionTitle from '@/components/atoms/SectionTitle.vue'
 import List from '@/components/atoms/List.vue'
 import Item from '@/components/atoms/Item.vue'
 import ModalBase from '@/components/molecules/ModalBase.vue'
@@ -66,6 +67,7 @@ export default {
     Button,
     TextInput,
     Switch,
+    SectionTitle,
     List,
     Item,
     ModalBase,
@@ -152,10 +154,6 @@ export default {
 </script>
 
 <style scoped>
-.form-name {
-  font-weight: bold;
-}
-
 .form-group {
   align-items: center;
   display: grid;
@@ -176,9 +174,5 @@ export default {
   display: grid;
   gap: 16px;
   grid-template-columns: 1fr max-content;
-}
-
-.text-right {
-  text-align: right;
 }
 </style>

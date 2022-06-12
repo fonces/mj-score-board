@@ -2,6 +2,7 @@
   <input
     type="text"
     class="text-input"
+    :style="{ textAlign: align }"
     v-bind="$attrs"
     :value="modelValue"
     @input="$emit('update:modelValue', $event.target.value)"
@@ -13,8 +14,18 @@
 export default {
   name: 'TextInput',
   inheritAttrs: false,
-  props: ['modelValue'],
   emits: ['update:modelValue'],
+  props: {
+    modelValue: {
+      type: [String, Number],
+      required: true,
+    },
+    align: {
+      type: String,
+      default: 'left',
+      validator: v => ['left', 'center', 'right'].includes(v),
+    },
+  },
   setup(props) {
     return {
       onFocus: e => (e.target.setSelectionRange(0, String(props.modelValue).length))
@@ -31,11 +42,6 @@ export default {
   color: var(--base-text);
   font-size: 14px;
   padding: 8px;
-}
-
-.text-input[type="tel"],
-.text-input[type="number"] {
-  text-align: right;
 }
 
 .text-input:focus,
