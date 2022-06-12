@@ -20,12 +20,13 @@ export default {
 }
 </script>
 
-<style scoped lang="postcss">
+<style scoped>
 .button {
-  background-color: transparent;
+  background: transparent;
   border-radius: 4px;
-  border: 1px solid #666;
+  border: 1px solid var(--border);
   cursor: pointer;
+  color: var(--base-text);
   font-size: 14px;
   font-weight: bold;
   height: 40px;
@@ -35,19 +36,19 @@ export default {
 }
 
 .button:disabled {
-  background-color: #ddd;
+  background: var(--disabled);
 }
 
 .primary {
-  color: #fff;
-  background-color: #0099FF;
   border: none;
+  color: var(--white);
+  background: var(--primary);
 }
 
 .small {
   font-size: 12px;
   height: 34px;
-  padding: 0px 12px;
   min-width: auto;
+  padding: 0px 12px;
 }
 </style>

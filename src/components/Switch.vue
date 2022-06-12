@@ -33,7 +33,7 @@ export default {
 label {
   width: 48px;
   height: 24px;
-  background: #ccc;
+  background: var(--gray);
   position: relative;
   display: inline-block;
   border-radius: 46px;
@@ -46,26 +46,25 @@ input {
 }
 
 input:checked + label{
-  background-color: #0099FF;
+  background-color: var(--primary);
 }
 
 label:after {
     content: '';
+    cursor: pointer;
     position: absolute;
     width: 24px;
     height: 24px;
     border-radius: 100%;
     left: 0;
     top: 0;
-    z-index: 2;
-    background: #fff;
-    box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+    background: var(--white);
+    box-shadow: 0 0 5px var(--shadow);
     transition: 0.2s;
-    cursor: pointer;
+    z-index: 2;
   }
 
 input:checked + label:after{
   left: 24px;
 }
-
 </style>

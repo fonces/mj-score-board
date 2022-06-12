@@ -1,6 +1,5 @@
 <template>
   <input
-    ref="root"
     type="text"
     class="text-input"
     v-bind="$attrs"
@@ -11,18 +10,13 @@
 </template>
 
 <script>
-import { ref } from 'vue'
-
 export default {
   name: 'TextInput',
   inheritAttrs: false,
   props: ['modelValue'],
   emits: ['update:modelValue'],
   setup(props) {
-    const rootRef = ref(null)
-
     return {
-      root: rootRef,
       onFocus: e => (e.target.setSelectionRange(0, String(props.modelValue).length))
     }
   }
@@ -33,7 +27,8 @@ export default {
 .text-input {
   box-sizing: border-box;
   border-radius: 4px;
-  border: solid 1px #666;
+  border: solid 1px var(--border);
+  color: var(--base-text);
   font-size: 14px;
   padding: 8px;
 }
@@ -46,10 +41,10 @@ export default {
 .text-input:focus,
 .text-input:focus-within {
 	outline: none;
-  border: solid 1px #0099FF;
+  border: solid 1px var(--primary);
 }
 
 .text-input:disabled {
-  background: #ddd;
+  background: var(--disabled);
 }
 </style>

@@ -8,22 +8,23 @@ export default {
 }
 </script>
 
-<style lang="postcss" scoped>
+<style scoped>
 .cross {
   display: block;
+  cursor: pointer;
+  height: 24px;
   position: relative;
   width: 24px;
-  height: 24px;
 }
  
 .cross::before, .cross::after {
   content: "";
+  background: var(--black);
+  height: 24px;
+  left: 50%;
   position: absolute;
   top: 50%;
-  left: 50%;
   width: 4px;
-  height: 24px;
-  background: #333;
 }
  
 .cross::before {

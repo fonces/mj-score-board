@@ -1,0 +1,18 @@
+:root {
+  --white: #fff;
+  --gray: #ccc;
+  --black: #333;
+
+  --primary: #0099ff;
+  --secondary: #CFEDFF;
+  --therd: #f0f8ff;
+  --border: #666;
+  --disabled: #ddd;
+  --alert: #ffcccc;
+  --error: #ff4500;
+  --shadow: rgb(0 0 0 / 15%);
+
+  --base-bg: #fefefe;
+  --overflow-bg: #deb887;
+  --base-text: var(--black);
+}

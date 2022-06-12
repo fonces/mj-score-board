@@ -100,7 +100,7 @@ export default {
 }
 
 .error {
-  color: #ff4500;
+  color: var(--error);
   font-size: 13px;
   font-weight: bold;
 }

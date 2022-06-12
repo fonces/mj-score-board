@@ -1,5 +1,5 @@
 <template>
-  <ModalBase class="edit-score-modal" :title="`スコア編集 - ${scoreIndex}回戦`" @close="onClose">
+  <ModalBase class="edit-score-modal" :title="`スコア編集 - ${scoreIndex + 1}回戦`" @close="onClose">
     <div class="container">
       <div class="actions">
         <Button @click="onClear">クリア</Button>
@@ -54,14 +54,12 @@ export default {
       required: true,
     },
     scoreIndex: {
-      typpe: Number,
+      type: Number,
       required: true,
     }
   },
   setup(props, { emit }) {
-    const model = reactive({
-      score: [...props.score],
-    })
+    const model = reactive({ score: [...props.score] })
     const diffRef = computed(() => model.score.reduce((acc, s) => acc += +s, 0))
 
     return {
@@ -92,7 +90,7 @@ export default {
 }
 
 .error {
-  color: #ff4500;
+  color: var(--error);
   font-size: 13px;
   font-weight: bold;
 }

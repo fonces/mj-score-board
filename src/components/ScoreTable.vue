@@ -229,8 +229,8 @@ export default {
 table {
   border-collapse: separate;
 	border-spacing: 0;
-  border-left: 1px solid #0099FF;
-  border-bottom: 1px solid #0099FF;
+  border-left: 1px solid var(--primary);
+  border-bottom: 1px solid var(--primary);
   min-width: 100%;
 }
 
@@ -239,7 +239,7 @@ tbody,
 tfoot,
 th,
 td {
-  background: #fefefe;
+  background: var(--base-bg);
 }
 
 thead,
@@ -257,23 +257,23 @@ tfoot {
 
 thead th,
 thead td {
-  border-bottom: 1px solid #0099FF;
-  box-shadow: -1px 3px 3px rgb(0 0 0 / 15%);
+  border-bottom: 1px solid var(--primary);
+  box-shadow: -1px 3px 3px var(--shadow);
 }
 
 tbody th {
-  box-shadow: 3px 0 3px rgb(0 0 0 / 15%);
+  box-shadow: 3px 0 3px var(--shadow);
 }
 
 tfoot th,
 tfoot td {
   bottom: 0;
-  box-shadow: 0 -3px 3px rgb(0 0 0 / 15%);
+  box-shadow: 0 -3px 3px var(--shadow);
 }
 
 th, td {
-  border-top: 1px solid #0099FF;
-  border-right: 1px solid #0099FF;
+  border-top: 1px solid var(--primary);
+  border-right: 1px solid var(--primary);
   cursor: pointer;
   min-width: 124px;
   text-align: center;
@@ -286,7 +286,7 @@ tr {
 
 tbody tr:nth-child(odd) th,
 tbody tr:nth-child(odd) td {
-  background: #CFEDFF;
+  background: var(--secondary);
 }
 
 th {
@@ -302,7 +302,7 @@ th:first-child {
 }
 
 tr.diff {
-  background: #ffcccc;
+  background: var(--alert);
 }
 
 tbody tr:first-child th,

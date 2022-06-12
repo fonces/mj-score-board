@@ -4,6 +4,7 @@
 
 <script>
 import '@/reset.css'
+import '@/root.css'
 import ScoreTable from '@/components/ScoreTable.vue'
 
 export default {
@@ -16,7 +17,12 @@ export default {
 
 <style>
 html {
-  background: #DEB887;
+  background: var(--overflow-bg);
+}
+
+body {
+  color: var(--base-text);
+  font-size: 16px;
 }
 
 #app {
@@ -25,11 +31,11 @@ html {
 }
 
 #app::-webkit-scrollbar {
-  display:none;
+  display: none;
 }
 
 #app.printing {
-  background: aliceblue;
+  background: var(--therd);
   height: min-content !important;
   width: min-content !important;
   padding: 16px;

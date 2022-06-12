@@ -29,9 +29,9 @@ export default {
 }
 </script>
 
-<style lang="postcss" scoped>
+<style scoped>
 .modal-base {
-  background: #fafafa;
+  background: var(--base-bg);
   position: fixed;
   top: 0;
   height: 100%;
@@ -46,7 +46,7 @@ export default {
 }
 
 header, footer {
-  background: #fafafa;
+  background: var(--base-bg);
   align-items: center;
   box-sizing: border-box;
   display: grid;
@@ -58,10 +58,10 @@ header, footer {
 }
 
 header {
-  border-bottom: 1px solid #333;
+  border-bottom: 1px solid var(--border);
   grid-template-columns: 1fr max-content;
   height: 48px;
-  filter: drop-shadow(0 1px 2px #ccc);
+  filter: drop-shadow(0 1px 2px var(--gray));
   padding: 0 16px;
   top: 0;
 }
@@ -72,8 +72,9 @@ main {
 }
 
 footer {
-  border-top: 1px solid #333;
+  border-top: 1px solid var(--border);
   bottom: 0;
+  filter: drop-shadow(-1px 0 2px var(--gray));
   grid-template-columns: 1fr;
   padding: 12px 16px;
 }
@@ -83,9 +84,5 @@ footer {
   font-weight: bold;
   margin-left: 24px;
   text-align: center;
-}
-
-.cross {
-  cursor: pointer;
 }
 </style>

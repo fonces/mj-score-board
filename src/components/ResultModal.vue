@@ -6,7 +6,7 @@
           <div class="form-name">レート</div>
           <div class="form-group">
             <label>1000点:</label>
-            <TextInput v-model.number="model.rate" type="tel" class="text-right" @blur="onBlur('rate', 50)" />
+            <TextInput v-model.number="model.rate" type="tel" class="text-right" @blur="onBlur" />
             <label>円</label>
           </div>
         </div>
@@ -14,7 +14,7 @@
           <div class="form-name">チップ</div>
           <div class="form-group">
             <label>1枚:</label>
-            <TextInput v-model.number="model.chipRate" class="text-right" @blur="onBlur('chipRate', 5000)" />
+            <TextInput v-model.number="model.chipRate" class="text-right" @blur="onBlurChipRate" />
             <label>点相当</label>
           </div>
         </div>
@@ -99,7 +99,8 @@ export default {
       model,
       editable: editableRef,
       toPrice,
-      onBlur: (type, defaultValue) => !Number.isInteger(model[type]) && (model[type] = defaultValue),
+      onBlur: () => !Number.isInteger(model.rate) && (model.rate = 50),
+      onBlurChipRate: () => (!Number.isInteger(model.chipRate) || model.chipRate % 1000 !== 0) && (model.chipRate = props.chipRate),
       onShare: () => {
         const url = new URL(location.pathname, location.href)
         url.searchParams.set('id', uuid())
