@@ -6,7 +6,7 @@
   "display": "fullscreen",
   "orientation": "any",
   "background_color": "#DEB887",
-  "theme_color": "#FFFFFF",
+  "theme_color": "#DEB887",
   "icons": [
     {
       "src": "/mj-score-board/favicon/android-chrome-192x192.png",
