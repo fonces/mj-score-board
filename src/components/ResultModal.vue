@@ -1,34 +1,34 @@
 <template>
   <ModalBase class="result-modal" title="結果" @close="onClose">
-    <div class="container">
-      <div class="list-group">
-        <div class="item">
+    <List gap="24px">
+      <List gap="24px">
+        <Item>
           <div class="form-name">レート</div>
           <div class="form-group">
             <label>1000点:</label>
             <TextInput v-model.number="model.rate" type="tel" class="text-right" @blur="onBlur" />
             <label>円</label>
           </div>
-        </div>
-        <div class="item">
+        </Item>
+        <Item>
           <div class="form-name">チップ</div>
           <div class="form-group">
             <label>1枚:</label>
             <TextInput v-model.number="model.chipRate" class="text-right" @blur="onBlurChipRate" />
             <label>点相当</label>
           </div>
-        </div>
-        <div class="item">
+        </Item>
+        <Item>
           <div class="form-name">結果</div>
-          <div class="list">
+          <List>
             <div v-for="(player, i) in players"  :key="i" class="form-group">
               <label>{{ player }}</label>
               <div />
               <label>{{ toPrice(i) }}円</label>
             </div>
-          </div>
-        </div>
-        <div class="item">
+          </List>
+        </Item>
+        <Item>
           <div class="form-name">その他</div>
           <div class="share">
             <label>編集を許可する</label>
@@ -39,9 +39,9 @@
             <TextInput v-model="model.fileName" placeholder="ファイル名" />
             <Button @click="onDownload">画像化</Button>
           </div>
-        </div>
-      </div>
-    </div>
+        </Item>
+      </List>
+    </List>
     <template #footer>
       <Button @click="onClose">キャンセル</Button>
       <Button primary @click="onReset">戦績クリア</Button>
@@ -53,18 +53,22 @@
 import { reactive, ref } from 'vue'
 import { v4 as uuid } from 'uuid'
 import html2canvas from 'html2canvas'
-import ModalBase from '@/components/ModalBase.vue'
-import Button from '@/components/Button.vue'
-import TextInput from '@/components/TextInput.vue'
-import Switch from '@/components/Switch.vue'
+import Button from '@/components/atoms/Button.vue'
+import TextInput from '@/components/atoms/TextInput.vue'
+import Switch from '@/components/atoms/Switch.vue'
+import List from '@/components/atoms/List.vue'
+import Item from '@/components/atoms/Item.vue'
+import ModalBase from '@/components/molecules/ModalBase.vue'
 
 export default {
   name: 'ResultModal',
   components: {
     Button,
-    ModalBase,
     TextInput,
     Switch,
+    List,
+    Item,
+    ModalBase,
   },
   props: {
     players: {
@@ -148,26 +152,6 @@ export default {
 </script>
 
 <style scoped>
-.container {
-  display: grid;
-  gap: 24px;
-}
-
-.list-group {
-  display: grid;
-  gap: 24px;
-}
-
-.list {
-  display: grid;
-  gap: 12px;
-}
-
-.item {
-  display: grid;
-  gap: 8px;
-}
-
 .form-name {
   font-weight: bold;
 }
@@ -178,13 +162,6 @@ export default {
   gap: 8px;
   grid-auto-flow: column;
   grid-template-columns: max-content 1fr max-content;
-}
-
-.actions {
-  align-items: center;
-  display: flex;
-  flex-direction: row-reverse;
-  justify-content: space-between;
 }
 
 .share {

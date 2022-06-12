@@ -4,7 +4,7 @@
       <tr class="player" @click="modal.player = true">
         <th />
         <th v-for="(u, i) in model.players" :key="i">
-          <span class="clamp1">{{ u }}</span>
+          <Clamp>{{ u }}</Clamp>
         </th>
       </tr>
     </thead>
@@ -38,37 +38,39 @@
     </tfoot>
   </table>
   <teleport to="#modal">
-    <EditPlayerModal
-      v-if="!isReadOnly && modal.player"
-      :players="model.players"
-      @save="onSaveEditPlayer"
-      @close="modal.player = false"
-    />
-    <EditScoreModal
-      v-if="!isReadOnly && modal.score"
-      :players="model.players"
-      :score="model.scores[modal.scoreIndex]"
-      :score-index="modal.scoreIndex"
-      @save="onSaveEditScore"
-      @close="modal.score = false"
-    />
-    <EditChipModal
-      v-if="!isReadOnly && modal.chip"
-      :players="model.players"
-      :chips="model.chips"
-      :chip-rate="model.chipRate"
-      @save="onSaveEditChip"
-      @close="modal.chip = false"
-    />
-    <ResultModal
-      v-if="!isReadOnly && modal.result"
-      :players="model.players"
-      :scores="model.scores"
-      :chips="model.chips"
-      :chip-rate="model.chipRate"
-      @reset="onReset"
-      @close="modal.result = false"
-    />
+    <template v-if="!isReadOnly">
+      <EditPlayerModal
+        v-if="modal.player"
+        :players="model.players"
+        @save="onSaveEditPlayer"
+        @close="modal.player = false"
+      />
+      <EditScoreModal
+        v-if="modal.score"
+        :players="model.players"
+        :score="model.scores[modal.scoreIndex]"
+        :score-index="modal.scoreIndex"
+        @save="onSaveEditScore"
+        @close="modal.score = false"
+      />
+      <EditChipModal
+        v-if="modal.chip"
+        :players="model.players"
+        :chips="model.chips"
+        :chip-rate="model.chipRate"
+        @save="onSaveEditChip"
+        @close="modal.chip = false"
+      />
+      <ResultModal
+        v-if="modal.result"
+        :players="model.players"
+        :scores="model.scores"
+        :chips="model.chips"
+        :chip-rate="model.chipRate"
+        @reset="onReset"
+        @close="modal.result = false"
+      />
+    </template>
   </teleport>
 </template>
 
@@ -77,6 +79,7 @@ import { reactive, computed, ref, watch, onBeforeMount } from 'vue'
 import { fill, split } from '@/utils/array'
 import { toPosiNega, toPlusMinus } from '@/utils/string'
 import { isDifference } from '@/utils/validator'
+import Clamp from '@/components/atoms/Clamp.vue'
 import EditPlayerModal from '@/components/EditPlayerModal.vue'
 import EditScoreModal from '@/components/EditScoreModal.vue'
 import EditChipModal from '@/components/EditChipModal.vue'
@@ -92,6 +95,7 @@ const createDefault = () => ({
 export default {
   name: 'ScoreTable',
   components: {
+    Clamp,
     EditPlayerModal,
     EditScoreModal,
     EditChipModal,
@@ -314,12 +318,5 @@ tbody tr:first-child td {
 .summary th {
   font-size: 20px;
   font-weight: bold;
-}
-
-.clamp1 {
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 1;
-  overflow: hidden;
 }
 </style>

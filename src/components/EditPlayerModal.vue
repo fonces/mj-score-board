@@ -1,8 +1,8 @@
 <template>
   <ModalBase class="edit-player-modal" title="ユーザー編集" @close="onClose">
-    <div class="container">
-      <div class="list">
-        <div v-for="(player, i) in model.players" :key="i" class="item">
+    <List gap="24px">
+      <List>
+        <Item v-for="(player, i) in model.players" :key="i">
           <TextInput
             v-model.trim="model.players[i]"
             :disabled="model.deleted.includes(i)"
@@ -12,9 +12,9 @@
             :class="{ undeletable: model.deleted.includes(i) || isLastIndex(i) }"
             @click="onDelete(i)"
           />
-        </div>
-      </div>
-    </div>
+        </Item>
+      </List>
+    </List>
     <template #footer>
       <Button @click="onClose">キャンセル</Button>
       <Button primary @click="onSave">保存</Button>
@@ -25,17 +25,21 @@
 <script>
 import { reactive, computed, watch } from 'vue'
 import CrossIcon from '@/components/icons/CrossIcon.vue'
-import ModalBase from '@/components/ModalBase.vue'
-import Button from '@/components/Button.vue'
-import TextInput from '@/components/TextInput.vue'
+import Button from '@/components/atoms/Button.vue'
+import TextInput from '@/components/atoms/TextInput.vue'
+import List from '@/components/atoms/List.vue'
+import Item from '@/components/atoms/Item.vue'
+import ModalBase from '@/components/molecules/ModalBase.vue'
 
 export default {
   name: 'EditPlayerModal',
   components: {
     CrossIcon,
     Button,
-    ModalBase,
     TextInput,
+    List,
+    Item,
+    ModalBase,
   },
   props: {
     players: {
@@ -71,26 +75,9 @@ export default {
 </script>
 
 <style scoped>
-.container {
-  display: grid;
-  gap: 24px;
-}
-
-.actions {
-  display: flex;
-  justify-content: flex-end;
-}
-
-.list {
-  display: grid;
-  gap: 12px;
-}
-
 .item {
   align-items: center;
-  display: grid;
   flex-direction: column;
-  gap: 8px;
   grid-template-columns: 1fr max-content;
 }
 

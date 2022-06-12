@@ -42,10 +42,18 @@ export default {
 }
 
 .modal-base::-webkit-scrollbar {
-  display:none;
+  display: none;
 }
 
-header, footer {
+.title {
+  font-size: 18px;
+  font-weight: bold;
+  margin-left: 24px;
+  text-align: center;
+}
+
+header,
+footer {
   background: var(--base-bg);
   align-items: center;
   box-sizing: border-box;
@@ -77,12 +85,5 @@ footer {
   filter: drop-shadow(-1px 0 2px var(--gray));
   grid-template-columns: 1fr;
   padding: 12px 16px;
-}
-
-.title {
-  font-size: 18px;
-  font-weight: bold;
-  margin-left: 24px;
-  text-align: center;
 }
 </style>

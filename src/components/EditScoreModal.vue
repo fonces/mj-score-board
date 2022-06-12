@@ -1,12 +1,12 @@
 <template>
   <ModalBase class="edit-score-modal" :title="`スコア編集 - ${scoreIndex + 1}回戦`" @close="onClose">
-    <div class="container">
+    <List gap="24px">
       <div class="actions">
         <Button @click="onClear">クリア</Button>
         <div v-if="isDifference(model.score)" class="error">{{ diff }}ポイント差分があります</div>
       </div>
-      <div class="list">
-        <div v-for="(player, i) in players" :key="i" class="item">
+      <List>
+        <Item v-for="(player, i) in players" :key="i">
           <div class="name">{{ player }}</div>
           <div class="form-field">
             <TextInput v-model.number="model.score[i]" @blur="onBlur(i)" />
@@ -19,9 +19,9 @@
               自動入力
             </Button>
           </div>
-        </div>
-      </div>
-    </div>
+        </Item>
+      </List>
+    </List>
     <template #footer>
       <Button @click="onClose">キャンセル</Button>
       <Button primary :disabled="isDifference(model.score)" @click="onSave">保存</Button>
@@ -33,16 +33,20 @@
 import { reactive, computed } from 'vue'
 import { fill } from '@/utils/array'
 import { isDifference } from '@/utils/validator'
-import ModalBase from '@/components/ModalBase.vue'
-import Button from '@/components/Button.vue'
-import TextInput from '@/components/TextInput.vue'
+import Button from '@/components/atoms/Button.vue'
+import TextInput from '@/components/atoms/TextInput.vue'
+import List from '@/components/atoms/List.vue'
+import Item from '@/components/atoms/Item.vue'
+import ModalBase from '@/components/molecules/ModalBase.vue'
 
 export default {
   name: 'EditScoreModal',
   components: {
     Button,
-    ModalBase,
     TextInput,
+    List,
+    Item,
+    ModalBase,
   },
   props: {
     players: {
@@ -77,11 +81,6 @@ export default {
 </script>
 
 <style scoped>
-.container {
-  display: grid;
-  gap: 24px;
-}
-
 .actions {
   align-items: center;
   display: flex;
@@ -93,16 +92,6 @@ export default {
   color: var(--error);
   font-size: 13px;
   font-weight: bold;
-}
-
-.list {
-  display: grid;
-  gap: 12px;
-}
-
-.item {
-  display: grid;
-  gap: 4px;
 }
 
 .name {
