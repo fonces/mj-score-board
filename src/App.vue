@@ -27,4 +27,11 @@ html {
 #app::-webkit-scrollbar {
   display:none;
 }
+
+#app.printing {
+  background: aliceblue;
+  height: min-content !important;
+  width: min-content !important;
+  padding: 16px;
+}
 </style>

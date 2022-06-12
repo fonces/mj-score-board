@@ -1,12 +1,12 @@
 <template>
   <ModalBase class="result-modal" title="結果" @close="onClose">
     <div class="container">
-      <div class="list">
+      <div class="list-group">
         <div class="item">
           <div class="form-name">レート</div>
           <div class="form-group">
             <label>1000点:</label>
-            <TextInput v-model.number="model.rate" type="tel" @blur="onBlur('rate', 50)" />
+            <TextInput v-model.number="model.rate" type="tel" class="text-right" @blur="onBlur('rate', 50)" />
             <label>円</label>
           </div>
         </div>
@@ -14,7 +14,7 @@
           <div class="form-name">チップ</div>
           <div class="form-group">
             <label>1枚:</label>
-            <TextInput v-model.number="model.chipRate" @blur="onBlur('chipRate', 5000)" />
+            <TextInput v-model.number="model.chipRate" class="text-right" @blur="onBlur('chipRate', 5000)" />
             <label>点相当</label>
           </div>
         </div>
@@ -35,6 +35,10 @@
             <Switch v-model="editable" name="editable" />
             <Button @click="onShare">シェア</Button>
           </div>
+          <div class="save-image">
+            <TextInput v-model="model.fileName" placeholder="ファイル名" />
+            <Button @click="onDownload">画像化</Button>
+          </div>
         </div>
       </div>
     </div>
@@ -48,6 +52,7 @@
 <script>
 import { reactive, ref } from 'vue'
 import { v4 as uuid } from 'uuid'
+import html2canvas from 'html2canvas'
 import ModalBase from '@/components/ModalBase.vue'
 import Button from '@/components/Button.vue'
 import TextInput from '@/components/TextInput.vue'
@@ -80,7 +85,7 @@ export default {
     },
   },
   setup(props, { emit }) {
-    const model = reactive({ rate: 50, chipRate: props.chipRate })
+    const model = reactive({ rate: 50, chipRate: props.chipRate, fileName: '' })
     const editableRef = ref(false)
 
     const toPrice = (i) => {
@@ -121,7 +126,21 @@ export default {
       },
       onReset: () => emit('reset'),
       onClose: () => emit('close'),
-      onSave: () => {},
+      onDownload: async () => {
+        const node = document.querySelector('#app')
+        try {
+          node.classList.add('printing')
+          const canvas = await html2canvas(node)
+          const link = document.createElement('a')
+          link.download = `${model.fileName || new Date().toLocaleString()}.png`
+          link.href = canvas.toDataURL('image/png')
+          link.click()
+        } catch(e) {
+          alert('画像の保存に失敗しました。')
+        } finally {
+          node.classList.remove('printing')
+        }
+      },
     }
   }
 }
@@ -133,6 +152,11 @@ export default {
   gap: 24px;
 }
 
+.list-group {
+  display: grid;
+  gap: 24px;
+}
+
 .list {
   display: grid;
   gap: 12px;
@@ -140,7 +164,7 @@ export default {
 
 .item {
   display: grid;
-  gap: 4px;
+  gap: 8px;
 }
 
 .form-name {
@@ -170,7 +194,13 @@ export default {
   grid-template-columns: max-content 1fr max-content;
 }
 
-.text-input {
+.save-image {
+  display: grid;
+  gap: 16px;
+  grid-template-columns: 1fr max-content;
+}
+
+.text-right {
   text-align: right;
 }
 </style>
