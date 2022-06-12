@@ -46,7 +46,7 @@ input {
 }
 
 input:checked + label{
-  background-color: #eb6100;
+  background-color: #0099FF;
 }
 
 label:after {

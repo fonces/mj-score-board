@@ -40,7 +40,7 @@ export default {
 
 .primary {
   color: #fff;
-  background-color: #eb6100;
+  background-color: #0099FF;
   border: none;
 }
 

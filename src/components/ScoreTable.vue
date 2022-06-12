@@ -24,7 +24,7 @@
       <tr class="chip" :class="{ diff: isDifference(model.chips) }" @click="modal.chip = true">
         <th>チップ</th>
         <td v-for="(chip, i) in model.chips" :key="i">
-          {{ 0 <= chip ? '+' : '-' }}{{ Math.abs(chip) }}枚
+          {{ toPlusMinus(chip) }}枚
         </td>
       </tr>
     </tbody>
@@ -75,7 +75,7 @@
 <script>
 import { reactive, computed, ref, watch, onBeforeMount } from 'vue'
 import { fill, split } from '@/utils/array'
-import { toPosiNega } from '@/utils/string'
+import { toPosiNega, toPlusMinus } from '@/utils/string'
 import { isDifference } from '@/utils/validator'
 import EditPlayerModal from '@/components/EditPlayerModal.vue'
 import EditScoreModal from '@/components/EditScoreModal.vue'
@@ -183,6 +183,7 @@ export default {
 
     return {
       toPosiNega,
+      toPlusMinus,
       isDifference,
       model,
       modal,
@@ -281,6 +282,11 @@ th, td {
 
 tr {
   height: 48px;
+}
+
+tbody tr:nth-child(odd) th,
+tbody tr:nth-child(odd) td {
+  background: #CFEDFF;
 }
 
 th {

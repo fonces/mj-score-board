@@ -43,6 +43,12 @@ export default {
   text-align: right;
 }
 
+.text-input:focus,
+.text-input:focus-within {
+	outline: none;
+  border: solid 1px #0099FF;
+}
+
 .text-input:disabled {
   background: #ddd;
 }
