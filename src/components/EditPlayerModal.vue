@@ -53,10 +53,9 @@ export default {
       deleted: [],
     })
     const lastIndexRef = computed(() => model.players.length - 1)
-    const lastUserRef = computed(() => model.players[lastIndexRef.value])
 
     watch(
-      () => lastUserRef.value,
+      () => model.players[lastIndexRef.value],
       player => player && (model.players = [...model.players, ''])
     )
 

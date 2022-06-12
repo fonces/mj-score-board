@@ -1,10 +1,10 @@
 <template>
   <ModalBase class="edit-score-modal" :title="`スコア編集 - ${scoreIndex + 1}回戦`" @close="onClose">
     <List gap="24px">
-      <div class="actions">
+      <Actions>
         <Button @click="onClear">クリア</Button>
-        <div v-if="isDifference(model.score)" class="error">{{ diff }}ポイント差分があります</div>
-      </div>
+        <Error v-if="isDifference(model.score)" :message="`${diff}ポイント差分があります`" />
+      </Actions>
       <List>
         <Item v-for="(player, i) in players" :key="i">
           <SectionTitle>{{ player }}</SectionTitle>
@@ -33,7 +33,9 @@
 import { reactive, computed } from 'vue'
 import { fill } from '@/utils/array'
 import { isDifference } from '@/utils/validator'
+import Actions from '@/components/atoms/Actions.vue'
 import Button from '@/components/atoms/Button.vue'
+import Error from '@/components/atoms/Error.vue'
 import TextInput from '@/components/atoms/TextInput.vue'
 import SectionTitle from '@/components/atoms/SectionTitle.vue'
 import List from '@/components/atoms/List.vue'
@@ -43,7 +45,9 @@ import ModalBase from '@/components/molecules/ModalBase.vue'
 export default {
   name: 'EditScoreModal',
   components: {
+    Actions,
     Button,
+    Error,
     TextInput,
     SectionTitle,
     List,
@@ -83,19 +87,6 @@ export default {
 </script>
 
 <style scoped>
-.actions {
-  align-items: center;
-  display: flex;
-  flex-direction: row-reverse;
-  justify-content: space-between;
-}
-
-.error {
-  color: var(--error);
-  font-size: 13px;
-  font-weight: bold;
-}
-
 .form-field {
   display: grid;
   gap: 8px;

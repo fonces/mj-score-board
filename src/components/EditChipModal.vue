@@ -1,10 +1,10 @@
 <template>
   <ModalBase class="edit-chips-modal" title="チップ編集" @close="onClose">
     <List gap="24px">
-      <div class="actions">
+      <Actions>
         <Button @click="onClear">クリア</Button>
-        <div v-if="isDifference(model.chips)" class="error">{{ diff }}枚差分があります</div>
-      </div>
+        <Error v-if="isDifference(model.chips)" :message="`${diff}枚差分があります`" />
+      </Actions>
       <div class="form-field chip-rate">
         <label>チップ1枚</label>
         <TextInput v-model.number="model.chipRate" type="tel" align="right" @blur="onBlurChipRate" />
@@ -39,7 +39,9 @@
 import { reactive, computed } from 'vue'
 import { fill } from '@/utils/array'
 import { isDifference } from '@/utils/validator'
+import Actions from '@/components/atoms/Actions.vue'
 import Button from '@/components/atoms/Button.vue'
+import Error from '@/components/atoms/Error.vue'
 import TextInput from '@/components/atoms/TextInput.vue'
 import SectionTitle from '@/components/atoms/SectionTitle.vue'
 import List from '@/components/atoms/List.vue'
@@ -49,7 +51,9 @@ import ModalBase from '@/components/molecules/ModalBase.vue'
 export default {
   name: 'EditChipModal',
   components: {
+    Actions,
     Button,
+    Error,
     TextInput,
     SectionTitle,
     List,
@@ -93,19 +97,6 @@ export default {
 </script>
 
 <style scoped>
-.actions {
-  align-items: center;
-  display: flex;
-  flex-direction: row-reverse;
-  justify-content: space-between;
-}
-
-.error {
-  color: var(--error);
-  font-size: 13px;
-  font-weight: bold;
-}
-
 .form-field {
   align-items: center;
   display: grid;
