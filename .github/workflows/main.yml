@@ -37,6 +37,7 @@ jobs:
     - name: build
       run: npm run build
       env:
+        VUE_APP_GA_MEASUREMENT_ID: ${{ secrets.VUE_APP_GA_MEASUREMENT_ID }}
         GITHUB_PAGES: true
 
     # しかしGitHub Pagesの仕様として_から始まるディレクトリが見えず404となる

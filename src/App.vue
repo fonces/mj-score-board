@@ -3,6 +3,7 @@
 </template>
 
 <script>
+import { pageview } from 'vue-gtag'
 import '@/assets/reset.css'
 import '@/assets/root.css'
 import ScoreTable from '@/components/ScoreTable.vue'
@@ -12,6 +13,9 @@ export default {
   components: {
     ScoreTable,
   },
+  setup() {
+    pageview('/index')
+  }
 }
 </script>
 

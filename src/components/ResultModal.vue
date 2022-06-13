@@ -51,6 +51,7 @@
 
 <script>
 import { reactive, ref } from 'vue'
+import { event } from 'vue-gtag'
 import { v4 as uuid } from 'uuid'
 import html2canvas from 'html2canvas'
 import Button from '@/components/atoms/Button.vue'
@@ -130,6 +131,7 @@ export default {
             url: url.toString(),
           })
         }
+        event('share', { event_label: editableRef.value ? 'editable' : 'readonly' })
       },
       onReset: () => emit('reset'),
       onClose: () => emit('close'),
@@ -146,6 +148,7 @@ export default {
           alert('画像の保存に失敗しました。')
         } finally {
           node.classList.remove('printing')
+          event('export-image')
         }
       },
     }
