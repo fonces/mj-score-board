@@ -305,8 +305,9 @@ th:first-child {
   width: 88px;
 }
 
-tr.diff {
-  background: var(--alert);
+tr.diff th,
+tr.diff td {
+  background: var(--alert) !important;
 }
 
 tbody tr:first-child th,
