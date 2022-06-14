@@ -6,7 +6,7 @@
           <SectionTitle>レート</SectionTitle>
           <div class="form-group">
             <label>1000点:</label>
-            <TextInput v-model.number="model.rate" type="tel" align="right" @blur="onBlur" />
+            <TextInput v-model.number.lazy="model.rate" type="tel" align="right" @blur="onBlur" />
             <label>円</label>
           </div>
         </Item>
@@ -14,7 +14,7 @@
           <SectionTitle>チップ</SectionTitle>
           <div class="form-group">
             <label>1枚:</label>
-            <TextInput v-model.number="model.chipRate" align="right" @blur="onBlurChipRate" />
+            <TextInput v-model.number.lazy="model.chipRate" align="right" @blur="onBlurChipRate" />
             <label>点相当</label>
           </div>
         </Item>

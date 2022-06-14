@@ -9,7 +9,7 @@
         <Item v-for="(player, i) in players" :key="i">
           <SectionTitle>{{ player }}</SectionTitle>
           <div class="form-field">
-            <TextInput v-model.number="model.score[i]" align="right" @blur="onBlur(i)" />
+            <TextInput v-model.number.lazy="model.score[i]" align="right" @blur="onBlur(i)" />
             <Button
               v-if="model.score[i] === 0 && isDifference(model.score)"
               small
