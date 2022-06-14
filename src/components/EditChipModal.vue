@@ -3,21 +3,21 @@
     <List gap="24px">
       <Actions>
         <Button @click="onClear">クリア</Button>
-        <Error v-if="isDifference(model.chips)" :message="`${diff}枚差分があります`" />
+        <Error v-if="diff" :message="`${diff}枚差分があります`" />
       </Actions>
       <div class="form-field chip-rate">
         <label>チップ1枚</label>
-        <TextInput v-model.number.lazy="model.chipRate" type="tel" align="right" @blur="onBlurChipRate" />
+        <TextInput v-model.number="model.chipRate" type="tel" align="right" @blur="onBlurChipRate" />
         <label>点相当</label>
       </div>
       <List>
         <Item v-for="(player, i) in players" :key="i">
           <SectionTitle>{{ player }}</SectionTitle>
           <div class="form-field">
-            <TextInput v-model.number.lazy="model.chips[i]" align="right" @blur="onBlur(i)" />
+            <TextInput v-model.number="model.chips[i]" align="right" @blur="onBlur(i)" />
             <label>枚</label>
             <Button
-              v-if="model.chips[i] === 0 && isDifference(model.chips)"
+              v-if="model.chips[i] === 0 && diff"
               small
               class="auto-input"
               @click="onAutoComplete(i)"
@@ -30,15 +30,14 @@
     </List>
     <template #footer>
       <Button @click="onClose">キャンセル</Button>
-      <Button primary :disabled="isDifference(model.chips)" @click="onSave">保存</Button>
+      <Button primary :disabled="diff" @click="onSave">保存</Button>
     </template>
   </ModalBase>
 </template>
 
 <script>
 import { reactive, computed } from 'vue'
-import { fill } from '@/utils/array'
-import { isDifference } from '@/utils/validator'
+import { fill, sum } from '@/utils/array'
 import Actions from '@/components/atoms/Actions.vue'
 import Button from '@/components/atoms/Button.vue'
 import Error from '@/components/atoms/Error.vue'
@@ -79,10 +78,9 @@ export default {
       chips: [...props.chips],
       chipRate: props.chipRate,
     })
-    const diffRef = computed(() => model.chips.reduce((acc, s) => acc += +s, 0))
+    const diffRef = computed(() => sum(model.chips))
 
     return {
-      isDifference,
       model,
       diff: diffRef,
       onBlur: i => !Number.isInteger(model.chips[i]) && (model.chips[i] = 0),

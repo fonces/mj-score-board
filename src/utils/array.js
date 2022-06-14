@@ -19,3 +19,10 @@ export const split = (list, divide) => (
     .fill()
     .map((_, i) => list.slice(i * divide, (i + 1) * divide))
 )
+
+/**
+ * 合計を算出する
+ * @param {Array} numbers
+ * @returns 
+ */
+ export const sum = numbers => numbers.reduce((acc, n) => acc += n, 0)

@@ -13,7 +13,7 @@
         v-for="(score, i) in model.scores"
         :key="i"
         class="score"
-        :class="{ diff: isDifference(score) }"
+        :class="{ diff: sum(score) }"
         @click="(modal.score = true) && (modal.scoreIndex = i)"
       >
         <th>{{ i + 1 }}回戦</th>
@@ -21,7 +21,7 @@
           {{ toPosiNega(value) }}
         </td>
       </tr>
-      <tr class="chip" :class="{ diff: isDifference(model.chips) }" @click="modal.chip = true">
+      <tr class="chip" :class="{ diff: sum(model.chips) }" @click="modal.chip = true">
         <th>チップ</th>
         <td v-for="(chip, i) in model.chips" :key="i">
           {{ toPlusMinus(chip) }}枚
@@ -29,7 +29,7 @@
       </tr>
     </tbody>
     <tfoot>
-      <tr class="summary" :class="{ diff: isDifference(summaries) }" @click="modal.result = true">
+      <tr class="summary" :class="{ diff: sum(summaries) }" @click="modal.result = true">
         <th>合計</th>
         <td v-for="(summary, i) in summaries" :key="i">
           {{ toPosiNega(summary) }}
@@ -76,9 +76,8 @@
 
 <script>
 import { reactive, computed, ref, watch, onBeforeMount } from 'vue'
-import { fill, split } from '@/utils/array'
+import { fill, split, sum } from '@/utils/array'
 import { toPosiNega, toPlusMinus } from '@/utils/string'
-import { isDifference } from '@/utils/validator'
 import Clamp from '@/components/atoms/Clamp.vue'
 import EditPlayerModal from '@/components/EditPlayerModal.vue'
 import EditScoreModal from '@/components/EditScoreModal.vue'
@@ -161,16 +160,10 @@ export default {
         }
       } catch(e) {
         alert('データの読み込みに失敗しました')
+      } finally {
+        history.replaceState(null, '', process.env.NODE_ENV === 'production' ? '/mj-score-board/' : '/')
       }
     })
-
-    watch(
-      () => lastScoreRef.value,
-      score => {
-        if (score.some(s => s !== 0)) 
-          model.scores = [...model.scores, fill(model.players.length)]
-      }
-    )
 
     watch(
       () => model,
@@ -185,10 +178,18 @@ export default {
       { deep: true },
     )
 
+    watch(
+      () => lastScoreRef.value,
+      score => {
+        if (score.some(s => s !== 0)) 
+          model.scores = [...model.scores, fill(model.players.length)]
+      }
+    )
+
     return {
       toPosiNega,
       toPlusMinus,
-      isDifference,
+      sum,
       model,
       modal,
       summaries: summariesRef,

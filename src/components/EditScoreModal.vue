@@ -3,7 +3,7 @@
     <List gap="24px">
       <Actions>
         <Button @click="onClear">クリア</Button>
-        <Error v-if="isDifference(model.score)" :message="`${diff}ポイント差分があります`" />
+        <Error v-if="diff" :message="`${diff}ポイント差分があります`" />
       </Actions>
       <List>
         <Item v-for="(player, i) in players" :key="i">
@@ -11,7 +11,7 @@
           <div class="form-field">
             <TextInput v-model.number.lazy="model.score[i]" align="right" @blur="onBlur(i)" />
             <Button
-              v-if="model.score[i] === 0 && isDifference(model.score)"
+              v-if="model.score[i] === 0 && diff"
               small
               class="auto-input"
               @click="onAutoComplete(i)"
@@ -24,15 +24,14 @@
     </List>
     <template #footer>
       <Button @click="onClose">キャンセル</Button>
-      <Button primary :disabled="isDifference(model.score)" @click="onSave">保存</Button>
+      <Button primary :disabled="diff" @click="onSave">保存</Button>
     </template>
   </ModalBase>
 </template>
 
 <script>
 import { reactive, computed } from 'vue'
-import { fill } from '@/utils/array'
-import { isDifference } from '@/utils/validator'
+import { fill, sum } from '@/utils/array'
 import Actions from '@/components/atoms/Actions.vue'
 import Button from '@/components/atoms/Button.vue'
 import Error from '@/components/atoms/Error.vue'
@@ -70,10 +69,9 @@ export default {
   },
   setup(props, { emit }) {
     const model = reactive({ score: [...props.score] })
-    const diffRef = computed(() => model.score.reduce((acc, s) => acc += +s, 0))
+    const diffRef = computed(() => sum(model.score))
 
     return {
-      isDifference,
       model,
       diff: diffRef,
       onBlur: i => !Number.isInteger(model.score[i]) && (model.score[i] = 0),
