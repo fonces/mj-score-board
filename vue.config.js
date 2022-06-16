@@ -14,7 +14,7 @@ module.exports = defineConfig({
     themeColor: '#f0f8ff',
     appleMobileWebAppCapable: 'yes',
     manifestOptions: {
-      short_name: 'すこあぼ',
+      short_name: 'スコぼ',
       start_url: BASE_PATH,
       display: 'fullscreen',
       description: '麻雀のスコアを記録するウェブアプリ',
