@@ -78,9 +78,9 @@ import { reactive, computed, ref, watch, onBeforeMount } from 'vue'
 import { fill, split, sum } from '@/utils/array'
 import { toFormat, toSymbol } from '@/utils/string'
 import Clamp from '@/components/atoms/Clamp.vue'
+import EditChipModal from '@/components/EditChipModal.vue'
 import EditPlayerModal from '@/components/EditPlayerModal.vue'
 import EditScoreModal from '@/components/EditScoreModal.vue'
-import EditChipModal from '@/components/EditChipModal.vue'
 import ResultModal from '@/components/ResultModal.vue'
 
 const createDefault = () => ({
@@ -94,9 +94,9 @@ export default {
   name: 'ScoreTable',
   components: {
     Clamp,
-    EditPlayerModal,
-    EditScoreModal,
     EditChipModal,
+    EditScoreModal,
+    EditPlayerModal,
     ResultModal,
   },
   setup() {
@@ -294,6 +294,7 @@ tbody tr:nth-child(odd) td {
 
 th {
   font-weight: bold;
+  padding: 0 12px;
 }
 
 th:first-child {

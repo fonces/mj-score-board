@@ -1,10 +1,10 @@
 <template>
   <ModalBase class="edit-chips-modal" title="チップ編集" @close="onClose">
     <Grid gap="24px">
-      <Actions>
-        <Button @click="onClear">クリア</Button>
+      <Flex direction="row-reverse">
+        <Button small @click="onClear">クリア</Button>
         <Label v-if="diff" bold error>{{ `${diff}枚差分があります` }}</Label>
-      </Actions>
+      </Flex>
       <FormGroup title="チップ">
         <FormField :columns="['max-content', '1fr', 'max-content']">
           <Label>1枚:</Label>
@@ -34,24 +34,24 @@
 <script>
 import { reactive, computed } from 'vue'
 import { fill, sum } from '@/utils/array'
-import Actions from '@/components/atoms/Actions.vue'
 import Button from '@/components/atoms/Button.vue'
 import FormField from '@/components/atoms/FormField.vue'
-import TextInput from '@/components/atoms/TextInput.vue'
+import Flex from '@/components/atoms/Flex.vue'
 import Grid from '@/components/atoms/Grid.vue'
 import Label from '@/components/atoms/Label.vue'
+import TextInput from '@/components/atoms/TextInput.vue'
 import FormGroup from '@/components/molecules/FormGroup.vue'
 import ModalBase from '@/components/molecules/ModalBase.vue'
 
 export default {
   name: 'EditChipModal',
   components: {
-    Actions,
     Button,
     FormField,
-    TextInput,
+    Flex,
     Grid,
     Label,
+    TextInput,
     FormGroup,
     ModalBase,
   },

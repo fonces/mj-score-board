@@ -48,10 +48,10 @@ import { v4 as uuid } from 'uuid'
 import html2canvas from 'html2canvas'
 import Button from '@/components/atoms/Button.vue'
 import FormField from '@/components/atoms/FormField.vue'
-import TextInput from '@/components/atoms/TextInput.vue'
-import Switch from '@/components/atoms/Switch.vue'
 import Grid from '@/components/atoms/Grid.vue'
 import Label from '@/components/atoms/Label.vue'
+import Switch from '@/components/atoms/Switch.vue'
+import TextInput from '@/components/atoms/TextInput.vue'
 import FormGroup from '@/components/molecules/FormGroup.vue'
 import ModalBase from '@/components/molecules/ModalBase.vue'
 
@@ -60,10 +60,10 @@ export default {
   components: {
     Button,
     FormField,
-    TextInput,
-    Switch,
     Grid,
     Label,
+    Switch,
+    TextInput,
     FormGroup,
     ModalBase,
   },

@@ -1,10 +1,10 @@
 <template>
   <ModalBase class="edit-score-modal" :title="`スコア編集 - ${scoreIndex + 1}回戦`" @close="onClose">
     <Grid gap="24px">
-      <Actions>
-        <Button @click="onClear">クリア</Button>
+      <Flex direction="row-reverse">
+        <Button small @click="onClear">クリア</Button>
         <Label v-if="diff" bold error>{{ `${diff}ポイント差分があります` }}</Label>
-      </Actions>
+      </Flex>
       <Grid>
         <FormGroup v-for="(player, i) in players" :key="i" :title="player">
           <FormField>
@@ -26,24 +26,24 @@
 <script>
 import { reactive, computed } from 'vue'
 import { fill, sum } from '@/utils/array'
-import Actions from '@/components/atoms/Actions.vue'
 import Button from '@/components/atoms/Button.vue'
 import FormField from '@/components/atoms/FormField.vue'
-import TextInput from '@/components/atoms/TextInput.vue'
+import Flex from '@/components/atoms/Flex.vue'
 import Grid from '@/components/atoms/Grid.vue'
 import Label from '@/components/atoms/Label.vue'
+import TextInput from '@/components/atoms/TextInput.vue'
 import FormGroup from '@/components/molecules/FormGroup.vue'
 import ModalBase from '@/components/molecules/ModalBase.vue'
 
 export default {
   name: 'EditScoreModal',
   components: {
-    Actions,
     Button,
     FormField,
-    TextInput,
+    Flex,
     Grid,
     Label,
+    TextInput,
     FormGroup,
     ModalBase,
   },
