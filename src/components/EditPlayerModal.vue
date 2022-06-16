@@ -63,13 +63,13 @@ export default {
       model,
       isLastIndex: i => i === lastIndexRef.value,
       onDelete: i => (model.deleted = [...model.deleted, i]),
-      onClose: () => emit('close'),
       onSave: () => emit('save', {
         players: 4 < model.players.length ? [...model.players].slice(0, -1) : [...model.players],
         deleted: [...model.deleted],
       }),
+      onClose: () => emit('close'),
     }
-  }
+  },
 }
 </script>
 

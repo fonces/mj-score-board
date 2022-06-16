@@ -21,8 +21,10 @@ export const split = (list, divide) => (
 )
 
 /**
- * 合計を算出する
+ * numbersの合計を算出する
  * @param {Array} numbers
  * @returns 
  */
- export const sum = numbers => numbers.reduce((acc, n) => acc += n, 0)
+ export const sum = numbers => (
+  numbers.reduce((acc, n) => acc += n, 0)
+ )

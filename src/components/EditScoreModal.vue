@@ -65,7 +65,7 @@ export default {
     scoreIndex: {
       type: Number,
       required: true,
-    }
+    },
   },
   setup(props, { emit }) {
     const model = reactive({ score: [...props.score] })
@@ -77,10 +77,10 @@ export default {
       onBlur: i => !Number.isInteger(model.score[i]) && (model.score[i] = 0),
       onAutoComplete: i => model.score[i] -= diffRef.value,
       onClear: () => model.score = fill(props.players.length),
-      onClose: () => emit('close'),
       onSave: () => emit('save', { score: [...model.score] }),
+      onClose: () => emit('close'),
     }
-  }
+  },
 }
 </script>
 

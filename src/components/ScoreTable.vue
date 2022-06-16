@@ -3,8 +3,8 @@
     <thead>
       <tr class="player" @click="modal.player = true">
         <th />
-        <th v-for="(u, i) in model.players" :key="i">
-          <Clamp>{{ u }}</Clamp>
+        <th v-for="(player, i) in model.players" :key="i">
+          <Clamp>{{ player }}</Clamp>
         </th>
       </tr>
     </thead>
@@ -17,14 +17,14 @@
         @click="(modal.score = true) && (modal.scoreIndex = i)"
       >
         <th>{{ i + 1 }}回戦</th>
-        <td v-for="(value, j) in score" :key="j">
-          {{ toPosiNega(value) }}
+        <td v-for="(point, j) in score" :key="j">
+          {{ toFormat(point) }}
         </td>
       </tr>
       <tr class="chip" :class="{ diff: sum(model.chips) }" @click="modal.chip = true">
         <th>チップ</th>
         <td v-for="(chip, i) in model.chips" :key="i">
-          {{ toPlusMinus(chip) }}枚
+          {{ toSymbol(chip) }}枚
         </td>
       </tr>
     </tbody>
@@ -32,7 +32,7 @@
       <tr class="summary" :class="{ diff: sum(summaries) }" @click="modal.result = true">
         <th>合計</th>
         <td v-for="(summary, i) in summaries" :key="i">
-          {{ toPosiNega(summary) }}
+          {{ toFormat(summary) }}
         </td>
       </tr>
     </tfoot>
@@ -77,7 +77,7 @@
 <script>
 import { reactive, computed, ref, watch, onBeforeMount } from 'vue'
 import { fill, split, sum } from '@/utils/array'
-import { toPosiNega, toPlusMinus } from '@/utils/string'
+import { toFormat, toSymbol } from '@/utils/string'
 import Clamp from '@/components/atoms/Clamp.vue'
 import EditPlayerModal from '@/components/EditPlayerModal.vue'
 import EditScoreModal from '@/components/EditScoreModal.vue'
@@ -187,8 +187,8 @@ export default {
     )
 
     return {
-      toPosiNega,
-      toPlusMinus,
+      toFormat,
+      toSymbol,
       sum,
       model,
       modal,
@@ -226,7 +226,7 @@ export default {
         modal.result = false
       },
     }
-  }
+  },
 }
 </script>
 

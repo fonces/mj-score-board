@@ -12,8 +12,8 @@ export default {
     line: {
       type: Number,
       default: 1,
-    }
-  }
+    },
+  },
 }
 </script>
 

@@ -95,17 +95,15 @@ export default {
     const model = reactive({ rate: 50, chipRate: props.chipRate, fileName: '' })
     const editableRef = ref(false)
 
-    const toPrice = (i) => {
-      const score = props.scores.reduce((acc, score) => (
-        acc + score[i]
-      ), 0) + (props.chips[i] * (model.chipRate / 1000))
-      return Number(score * model.rate).toLocaleString()
-    }
-
     return {
       model,
       editable: editableRef,
-      toPrice,
+      toPrice: (i) => {
+        const score = props.scores.reduce((acc, score) => (
+          acc + score[i]
+        ), 0) + (props.chips[i] * (model.chipRate / 1000))
+        return Number(score * model.rate).toLocaleString()
+      },
       onBlur: () => !Number.isInteger(model.rate) && (model.rate = 50),
       onBlurChipRate: () => (!Number.isInteger(model.chipRate) || model.chipRate % 1000 !== 0) && (model.chipRate = props.chipRate),
       onShare: () => {
@@ -133,8 +131,6 @@ export default {
         }
         event('share', { event_label: editableRef.value ? 'editable' : 'readonly' })
       },
-      onReset: () => emit('reset'),
-      onClose: () => emit('close'),
       onDownload: async () => {
         const node = document.querySelector('#app')
         try {
@@ -151,8 +147,10 @@ export default {
           event('export-image')
         }
       },
+      onReset: () => emit('reset'),
+      onClose: () => emit('close'),
     }
-  }
+  },
 }
 </script>
 

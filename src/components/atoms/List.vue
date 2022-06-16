@@ -12,8 +12,8 @@ export default {
     gap: {
       type: String,
       default: '12px',
-    }
-  }
+    },
+  },
 }
 </script>
 

@@ -87,10 +87,10 @@ export default {
       onBlurChipRate: () => (!Number.isInteger(model.chipRate) || model.chipRate % 1000 !== 0) && (model.chipRate = props.chipRate),
       onAutoComplete: i => model.chips[i] -= diffRef.value,
       onClear: () => model.chips = fill(props.players.length),
-      onClose: () => emit('close'),
       onSave: () => emit('save', { ...model, chips: [...model.chips] }),
+      onClose: () => emit('close'),
     }
-  }
+  },
 }
 </script>
 

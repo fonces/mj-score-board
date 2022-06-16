@@ -15,7 +15,7 @@ export default {
   },
   setup() {
     pageview('/index')
-  }
+  },
 }
 </script>
 

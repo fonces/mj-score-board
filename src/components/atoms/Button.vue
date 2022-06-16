@@ -16,7 +16,7 @@ export default {
     small: {
       type: Boolean,
     },
-  }
+  },
 }
 </script>
 

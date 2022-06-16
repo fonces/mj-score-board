@@ -1,9 +1,9 @@
 <template>
   <input
     type="text"
+    v-bind="$attrs"
     class="text-input"
     :style="{ textAlign: align }"
-    v-bind="$attrs"
     :value="modelValue"
     @input="$emit('update:modelValue', $event.target.value)"
     @focus="onFocus"
@@ -28,9 +28,9 @@ export default {
   },
   setup(props) {
     return {
-      onFocus: e => (e.target.setSelectionRange(0, String(props.modelValue).length))
+      onFocus: e => (e.target.setSelectionRange(0, String(props.modelValue).length)),
     }
-  }
+  },
 }
 </script>
 
@@ -46,7 +46,7 @@ export default {
 
 .text-input:focus,
 .text-input:focus-within {
-	outline: none;
+  outline: none;
   border: solid 1px var(--primary);
 }
 
