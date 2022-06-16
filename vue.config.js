@@ -11,7 +11,7 @@ module.exports = defineConfig({
   publicPath: BASE_PATH,
   pwa: {
     name: '麻雀スコアボード',
-    themeColor: '#deb887',
+    themeColor: '#f0f8ff',
     appleMobileWebAppCapable: 'yes',
     manifestOptions: {
       short_name: 'すこあぼ',
@@ -19,7 +19,7 @@ module.exports = defineConfig({
       display: 'fullscreen',
       description: '麻雀のスコアを記録するウェブアプリ',
       orientation: 'any',
-      background_color: '#deb887',
+      background_color: '#f0f8ff',
       icons: [
         {
           src: 'favicon/android-chrome-192x192.png',
