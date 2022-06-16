@@ -5,26 +5,24 @@
         <Button @click="onClear">クリア</Button>
         <Error v-if="diff" :message="`${diff}枚差分があります`" />
       </Actions>
-      <div class="form-field chip-rate">
-        <label>チップ1枚</label>
-        <TextInput v-model.number="model.chipRate" type="tel" align="right" @blur="onBlurChipRate" />
-        <label>点相当</label>
-      </div>
+      <Item>
+        <SectionTitle>チップ</SectionTitle>
+        <FormField :columns="['max-content', '1fr', 'max-content']">
+          <label>1枚:</label>
+          <TextInput v-model.number="model.chipRate" type="tel" align="right" @blur="onBlurChipRate" />
+          <label>点相当</label>
+        </FormField>
+      </Item>
       <List>
         <Item v-for="(player, i) in players" :key="i">
           <SectionTitle>{{ player }}</SectionTitle>
-          <div class="form-field">
+          <FormField>
             <TextInput v-model.number="model.chips[i]" align="right" @blur="onBlur(i)" />
             <label>枚</label>
-            <Button
-              v-if="model.chips[i] === 0 && diff"
-              small
-              class="auto-input"
-              @click="onAutoComplete(i)"
-            >
+            <Button v-if="model.chips[i] === 0 && diff" small @click="onAutoComplete(i)">
               自動入力
             </Button>
-          </div>
+          </FormField>
         </Item>
       </List>
     </List>
@@ -41,6 +39,7 @@ import { fill, sum } from '@/utils/array'
 import Actions from '@/components/atoms/Actions.vue'
 import Button from '@/components/atoms/Button.vue'
 import Error from '@/components/atoms/Error.vue'
+import FormField from '@/components/atoms/FormField.vue'
 import TextInput from '@/components/atoms/TextInput.vue'
 import SectionTitle from '@/components/atoms/SectionTitle.vue'
 import List from '@/components/atoms/List.vue'
@@ -53,6 +52,7 @@ export default {
     Actions,
     Button,
     Error,
+    FormField,
     TextInput,
     SectionTitle,
     List,
@@ -86,24 +86,13 @@ export default {
       onBlur: i => !Number.isInteger(model.chips[i]) && (model.chips[i] = 0),
       onBlurChipRate: () => (!Number.isInteger(model.chipRate) || model.chipRate % 1000 !== 0) && (model.chipRate = props.chipRate),
       onAutoComplete: i => model.chips[i] -= diffRef.value,
-      onClear: () => model.chips = fill(props.players.length),
+      onClear: () => {
+        model.chips = fill(props.players.length)
+        model.chipRate = 5000
+      },
       onSave: () => emit('save', { ...model, chips: [...model.chips] }),
       onClose: () => emit('close'),
     }
   },
 }
 </script>
-
-<style scoped>
-.form-field {
-  align-items: center;
-  display: grid;
-  gap: 8px;
-  grid-auto-flow: column;
-  grid-template-columns: 1fr max-content max-content;
-}
-
-.chip-rate {
-  grid-template-columns: max-content 1fr max-content;
-}
-</style>

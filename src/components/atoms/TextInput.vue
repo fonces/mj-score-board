@@ -1,8 +1,8 @@
 <template>
   <input
     type="text"
-    v-bind="$attrs"
     class="text-input"
+    v-bind="$attrs"
     :style="{ textAlign: align }"
     :value="modelValue"
     @input="$emit('update:modelValue', $event.target.value)"
@@ -44,10 +44,9 @@ export default {
   padding: 8px;
 }
 
-.text-input:focus,
-.text-input:focus-within {
-  outline: none;
+.text-input:focus {
   border: solid 1px var(--primary);
+  outline: none;
 }
 
 .text-input:disabled {

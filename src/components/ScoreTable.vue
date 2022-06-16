@@ -1,7 +1,7 @@
 <template>
   <table>
     <thead>
-      <tr class="player" @click="modal.player = true">
+      <tr @click="modal.player = true">
         <th />
         <th v-for="(player, i) in model.players" :key="i">
           <Clamp>{{ player }}</Clamp>
@@ -12,7 +12,6 @@
       <tr
         v-for="(score, i) in model.scores"
         :key="i"
-        class="score"
         :class="{ diff: sum(score) }"
         @click="(modal.score = true) && (modal.scoreIndex = i)"
       >
@@ -21,7 +20,7 @@
           {{ toFormat(point) }}
         </td>
       </tr>
-      <tr class="chip" :class="{ diff: sum(model.chips) }" @click="modal.chip = true">
+      <tr :class="{ diff: sum(model.chips) }" @click="modal.chip = true">
         <th>チップ</th>
         <td v-for="(chip, i) in model.chips" :key="i">
           {{ toSymbol(chip) }}枚
@@ -31,14 +30,14 @@
     <tfoot>
       <tr class="summary" :class="{ diff: sum(summaries) }" @click="modal.result = true">
         <th>合計</th>
-        <td v-for="(summary, i) in summaries" :key="i">
+        <td v-for="(summary, i) in summaries" class="bold" :key="i">
           {{ toFormat(summary) }}
         </td>
       </tr>
     </tfoot>
   </table>
   <teleport to="#modal">
-    <template v-if="!isReadOnly">
+    <template v-if="isEditable">
       <EditPlayerModal
         v-if="modal.player"
         :players="model.players"
@@ -103,7 +102,6 @@ export default {
   setup() {
     const defaults = createDefault()
 
-    const isReadOnlyRef = ref(false)
     const model = reactive({
       players: defaults.players,
       scores: defaults.scores,
@@ -117,13 +115,7 @@ export default {
       result: false,
       scoreIndex: null,
     })
-    const summariesRef = computed(() => (
-      model.scores.reduce(
-        (acc, score) => score.map((s, j) => acc[j] += s),
-        fill(model.players.length),
-      ).map((s, i) => s + (model.chips[i] * (model.chipRate / 1000)))
-    ))
-    const lastScoreRef = computed(() => model.scores[model.scores.length - 1])
+    const isEditableRef = ref(true)
 
     onBeforeMount(() => {
       const setState = item => {
@@ -140,7 +132,7 @@ export default {
       try {
         const params = (new URL(document.location)).searchParams
         if (params.get('id')) {
-          isReadOnlyRef.value = !JSON.parse(params.get('editable'))
+          isEditableRef.value = !!JSON.parse(params.get('editable'))
           const item = [...params].reduce((acc, [key, value]) => ({ ...acc, [key]: value }), {})
           const scores = item.scores.split(',')
           const players = item.players.split(',')
@@ -168,7 +160,7 @@ export default {
     watch(
       () => model,
       () => {
-        if (isReadOnlyRef.value) return
+        if (!isEditableRef.value) return
         localStorage.setItem('model', JSON.stringify({
           ...model,
           scores: [...model.scores],
@@ -179,7 +171,7 @@ export default {
     )
 
     watch(
-      () => lastScoreRef.value,
+      () => model.scores[model.scores.length - 1],
       score => {
         if (score.some(s => s !== 0)) 
           model.scores = [...model.scores, fill(model.players.length)]
@@ -187,13 +179,18 @@ export default {
     )
 
     return {
+      sum,
       toFormat,
       toSymbol,
-      sum,
       model,
       modal,
-      summaries: summariesRef,
-      isReadOnly: isReadOnlyRef,
+      isEditable: isEditableRef,
+      summaries: computed(() => (
+        model.scores.reduce(
+          (acc, score) => score.map((s, j) => acc[j] += s),
+          fill(model.players.length),
+        ).map((s, i) => s + (model.chips[i] * (model.chipRate / 1000)))
+      )),
       onSaveEditPlayer: ({ players, deleted }) => {
         model.players = players.filter((_, i) => !deleted.includes(i))
         model.scores = model.scores.map(score => score.filter((_, j) => !deleted.includes(j)))
@@ -207,16 +204,16 @@ export default {
 
         modal.player = false
       },
-      onSaveEditScore: (({ score }) => {
+      onSaveEditScore: ({ score }) => {
         model.scores[modal.scoreIndex] = score
         modal.scoreIndex = null
         modal.score = false
-      }),
-      onSaveEditChip: (({ chips, chipRate }) => {
+      },
+      onSaveEditChip: ({ chips, chipRate }) => {
         model.chips = chips
         model.chipRate = chipRate
         modal.chip = false
-      }),
+      },
       onReset: () => {
         const { players, scores, chips, chipRate } = createDefault()
         model.players = players
@@ -236,6 +233,7 @@ table {
 	border-spacing: 0;
   border-left: 1px solid var(--primary);
   border-bottom: 1px solid var(--primary);
+  font-size: 16px;
   min-width: 100%;
 }
 
@@ -316,9 +314,7 @@ tbody tr:first-child td {
   border-top: none;
 }
 
-.summary td,
-.summary th {
+.summary {
   font-size: 20px;
-  font-weight: bold;
 }
 </style>

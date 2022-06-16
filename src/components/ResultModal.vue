@@ -4,41 +4,39 @@
       <List gap="24px">
         <Item>
           <SectionTitle>レート</SectionTitle>
-          <div class="form-group">
+          <FormField :columns="['max-content', '1fr', 'max-content']">
             <label>1000点:</label>
             <TextInput v-model.number.lazy="model.rate" type="tel" align="right" @blur="onBlur" />
             <label>円</label>
-          </div>
+          </FormField>
         </Item>
         <Item>
           <SectionTitle>チップ</SectionTitle>
-          <div class="form-group">
+          <FormField :columns="['max-content', '1fr', 'max-content']">
             <label>1枚:</label>
             <TextInput v-model.number.lazy="model.chipRate" align="right" @blur="onBlurChipRate" />
             <label>点相当</label>
-          </div>
+          </FormField>
         </Item>
         <Item>
           <SectionTitle>結果</SectionTitle>
-          <List>
-            <div v-for="(player, i) in players" :key="i" class="form-group">
+          <List gap="12px">
+            <FormField v-for="(player, i) in players" :key="i">
               <label>{{ player }}</label>
-              <div />
-              <label>{{ toPrice(i) }}円</label>
-            </div>
+              <SectionTitle>{{ toPrice(i) }}円</SectionTitle>
+            </FormField>
           </List>
         </Item>
         <Item>
           <SectionTitle>その他</SectionTitle>
-          <div class="share">
-            <label>編集を許可する</label>
-            <Switch v-model="editable" name="editable" />
-            <Button @click="onShare">シェア</Button>
-          </div>
-          <div class="save-image">
+          <FormField>
+            <Switch v-model="editable" name="editable">編集を許可する</Switch>
+            <Button small @click="onShare">シェア</Button>
+          </FormField>
+          <FormField>
             <TextInput v-model="model.fileName" placeholder="ファイル名" />
-            <Button @click="onDownload">画像化</Button>
-          </div>
+            <Button small @click="onDownload">画像化</Button>
+          </FormField>
         </Item>
       </List>
     </List>
@@ -55,6 +53,7 @@ import { event } from 'vue-gtag'
 import { v4 as uuid } from 'uuid'
 import html2canvas from 'html2canvas'
 import Button from '@/components/atoms/Button.vue'
+import FormField from '@/components/atoms/FormField.vue'
 import TextInput from '@/components/atoms/TextInput.vue'
 import Switch from '@/components/atoms/Switch.vue'
 import SectionTitle from '@/components/atoms/SectionTitle.vue'
@@ -66,6 +65,7 @@ export default {
   name: 'ResultModal',
   components: {
     Button,
+    FormField,
     TextInput,
     Switch,
     SectionTitle,
@@ -118,7 +118,7 @@ export default {
         if (typeof navigator.share === 'undefined') {
           if (navigator.clipboard) {
             navigator.clipboard.writeText(url.toString())
-            alert('コピーしました')
+            alert('コピーしました。')
           } else {
             alert('お使いのブラウザにはクリップボード機能がありません。')
           }
@@ -153,27 +153,3 @@ export default {
   },
 }
 </script>
-
-<style scoped>
-.form-group {
-  align-items: center;
-  display: grid;
-  gap: 8px;
-  grid-auto-flow: column;
-  grid-template-columns: max-content 1fr max-content;
-}
-
-.share {
-  align-items: center;
-  display: grid;
-  gap: 16px;
-  grid-auto-flow: column;
-  grid-template-columns: max-content 1fr max-content;
-}
-
-.save-image {
-  display: grid;
-  gap: 16px;
-  grid-template-columns: 1fr max-content;
-}
-</style>

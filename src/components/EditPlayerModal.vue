@@ -1,18 +1,18 @@
 <template>
-  <ModalBase class="edit-player-modal" title="ユーザー編集" @close="onClose">
+  <ModalBase class="edit-player-modal" title="プレイヤー編集" @close="onClose">
     <List gap="24px">
       <List>
-        <Item v-for="(player, i) in model.players" :key="i">
+        <FormField v-for="(player, i) in model.players" :key="i">
           <TextInput
             v-model.trim="model.players[i]"
             :disabled="model.deleted.includes(i)"
-            placeholder="Please player Name..."
+            placeholder="Please player name..."
           />
           <CrossIcon
             :class="{ undeletable: model.deleted.includes(i) || isLastIndex(i) }"
             @click="onDelete(i)"
           />
-        </Item>
+        </FormField>
       </List>
     </List>
     <template #footer>
@@ -28,7 +28,7 @@ import CrossIcon from '@/components/icons/CrossIcon.vue'
 import Button from '@/components/atoms/Button.vue'
 import TextInput from '@/components/atoms/TextInput.vue'
 import List from '@/components/atoms/List.vue'
-import Item from '@/components/atoms/Item.vue'
+import FormField from '@/components/atoms/FormField.vue'
 import ModalBase from '@/components/molecules/ModalBase.vue'
 
 export default {
@@ -38,7 +38,7 @@ export default {
     Button,
     TextInput,
     List,
-    Item,
+    FormField,
     ModalBase,
   },
   props: {
@@ -74,12 +74,6 @@ export default {
 </script>
 
 <style scoped>
-.item {
-  align-items: center;
-  flex-direction: column;
-  grid-template-columns: 1fr max-content;
-}
-
 .cross.undeletable {
   visibility: hidden;
 }

@@ -1,12 +1,15 @@
 <template>
   <div class="switch">
+    <label :for="name">
+      <slot />
+    </label>
     <input
       :id="name"
       type='checkbox'
       :value="modelValue"
       @input="$emit('update:modelValue', $event.target.checked)"
     />
-    <label :for="name" />
+    <label class="button" :for="name" />
   </div>
 </template>
 
@@ -30,7 +33,19 @@ export default {
 </script>
 
 <style scoped>
-label {
+.switch {
+  align-items: center;
+  display: grid;
+  gap: 8px;
+  grid-auto-flow: column;
+  width: fit-content;
+}
+
+input {
+  display: none;
+}
+
+.button {
   width: 48px;
   height: 24px;
   background: var(--gray);
@@ -41,15 +56,7 @@ label {
   box-sizing: border-box;
 }
 
-input {
-  display: none;
-}
-
-input:checked + label{
-  background-color: var(--primary);
-}
-
-label:after {
+.button:after {
   content: '';
   cursor: pointer;
   position: absolute;
@@ -64,7 +71,11 @@ label:after {
   z-index: 2;
 }
 
-input:checked + label:after{
+input:checked + .button {
+  background-color: var(--primary);
+}
+
+input:checked + .button:after{
   left: 24px;
 }
 </style>

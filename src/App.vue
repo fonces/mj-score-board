@@ -26,7 +26,6 @@ html {
 
 body {
   color: var(--base-text);
-  font-size: 16px;
 }
 
 #app {

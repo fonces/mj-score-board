@@ -1,7 +1,7 @@
 <template>
   <div class="modal-base">
     <header>
-      <div class="title">{{ title }}</div>
+      <div class="title bold">{{ title }}</div>
       <CrossIcon @click="$emit('close')" />
     </header>
     <main>
@@ -47,7 +47,6 @@ export default {
 
 .title {
   font-size: 18px;
-  font-weight: bold;
   margin-left: 24px;
   text-align: center;
 }

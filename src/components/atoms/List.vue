@@ -11,7 +11,7 @@ export default {
   props: {
     gap: {
       type: String,
-      default: '12px',
+      default: '16px',
     },
   },
 }

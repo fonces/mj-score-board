@@ -1,5 +1,5 @@
 <template>
-  <div class="section-title">
+  <div class="section-title bold">
     <slot />
   </div>
 </template>
@@ -12,6 +12,6 @@ export default {
 
 <style scoped>
 .section-title {
-  font-weight: bold;
+  font-size: 16px;
 }
 </style>

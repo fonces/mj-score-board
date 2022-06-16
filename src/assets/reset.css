@@ -25,6 +25,7 @@ footer, header, hgroup, menu, nav, section {
 }
 
 body {
+  font-size: 14px;
 	line-height: 1;
 }
 

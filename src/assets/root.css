@@ -13,6 +13,10 @@
   --shadow: rgb(0 0 0 / 15%);
 
   --base-bg: #fefefe;
-  --overflow-bg: #deb887;
+  --overflow-bg: var(--therd);
   --base-text: var(--black);
+}
+
+.bold {
+  font-weight: bold;
 }
