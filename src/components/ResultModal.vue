@@ -17,10 +17,12 @@
           </FormField>
         </FormGroup>
         <FormGroup title="結果">
-          <FormField v-for="(player, i) in players" :key="i">
-            <Label>{{ player }}</Label>
-            <Label bold strong>{{ toPrice(i) }}円</Label>
-          </FormField>
+          <table>
+            <tr v-for="({ player, price }, i) in results" :key="i">
+              <th class="bold">{{ player }}</th>
+              <td class="bold" :class="{ minus: price < 0 }">{{ price.toLocaleString() }}円</td>
+            </tr>
+          </table>
         </FormGroup>
         <FormGroup title="その他">
           <FormField>
@@ -42,7 +44,7 @@
 </template>
 
 <script>
-import { reactive, ref } from 'vue'
+import { reactive, computed, ref } from 'vue'
 import { event } from 'vue-gtag'
 import { v4 as uuid } from 'uuid'
 import html2canvas from 'html2canvas'
@@ -92,12 +94,15 @@ export default {
     return {
       model,
       editable: editableRef,
-      toPrice: (i) => {
-        const score = props.scores.reduce((acc, score) => (
+      results: computed(() => props.players.map((player, i) => {
+        const point = props.scores.reduce((acc, score) => (
           acc + score[i]
         ), 0) + (props.chips[i] * (model.chipRate / 1000))
-        return Number(score * model.rate).toLocaleString()
-      },
+        return {
+          player,
+          price: point * model.rate,
+        }
+      })),
       onBlur: () => !Number.isInteger(model.rate) && (model.rate = 50),
       onBlurChipRate: () => (!Number.isInteger(model.chipRate) || model.chipRate % 1000 !== 0) && (model.chipRate = props.chipRate),
       onShare: () => {
@@ -147,3 +152,30 @@ export default {
   },
 }
 </script>
+
+<style scoped>
+tr {
+  border: 1px solid var(--primary);
+}
+
+tr:nth-child(odd) {
+  background: var(--secondary);
+}
+
+th,
+td {
+  padding: 16px 12px;
+}
+
+th {
+  text-align: left;
+}
+
+td {
+  text-align: right;
+}
+
+td.minus {
+  color: var(--error);
+}
+</style>
