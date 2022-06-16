@@ -3,18 +3,17 @@
     <Grid gap="24px">
       <Actions>
         <Button @click="onClear">クリア</Button>
-        <Error v-if="diff" :message="`${diff}ポイント差分があります`" />
+        <Label v-if="diff" bold error>{{ `${diff}ポイント差分があります` }}</Label>
       </Actions>
       <Grid>
-        <Item v-for="(player, i) in players" :key="i">
-          <SectionTitle>{{ player }}</SectionTitle>
+        <FormGroup v-for="(player, i) in players" :key="i" :title="player">
           <FormField>
             <TextInput v-model.number.lazy="model.score[i]" align="right" @blur="onBlur(i)" />
             <Button v-if="model.score[i] === 0 && diff" small @click="onAutoComplete(i)">
               自動入力
             </Button>
           </FormField>
-        </Item>
+        </FormGroup>
       </Grid>
     </Grid>
     <template #footer>
@@ -29,12 +28,11 @@ import { reactive, computed } from 'vue'
 import { fill, sum } from '@/utils/array'
 import Actions from '@/components/atoms/Actions.vue'
 import Button from '@/components/atoms/Button.vue'
-import Error from '@/components/atoms/Error.vue'
 import FormField from '@/components/atoms/FormField.vue'
 import TextInput from '@/components/atoms/TextInput.vue'
-import SectionTitle from '@/components/atoms/SectionTitle.vue'
 import Grid from '@/components/atoms/Grid.vue'
-import Item from '@/components/atoms/Item.vue'
+import Label from '@/components/atoms/Label.vue'
+import FormGroup from '@/components/molecules/FormGroup.vue'
 import ModalBase from '@/components/molecules/ModalBase.vue'
 
 export default {
@@ -42,12 +40,11 @@ export default {
   components: {
     Actions,
     Button,
-    Error,
     FormField,
     TextInput,
-    SectionTitle,
     Grid,
-    Item,
+    Label,
+    FormGroup,
     ModalBase,
   },
   props: {

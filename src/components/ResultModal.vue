@@ -2,42 +2,36 @@
   <ModalBase class="result-modal" title="結果" @close="onClose">
     <Grid gap="24px">
       <Grid gap="24px">
-        <Item>
-          <SectionTitle>レート</SectionTitle>
+        <FormGroup title="レート">
           <FormField :columns="['max-content', '1fr', 'max-content']">
-            <label>1000点:</label>
+            <Label>1000点:</Label>
             <TextInput v-model.number.lazy="model.rate" type="tel" align="right" @blur="onBlur" />
-            <label>円</label>
+            <Label>円</Label>
           </FormField>
-        </Item>
-        <Item>
-          <SectionTitle>チップ</SectionTitle>
+        </FormGroup>
+        <FormGroup title="チップ">
           <FormField :columns="['max-content', '1fr', 'max-content']">
-            <label>1枚:</label>
+            <Label>1枚:</Label>
             <TextInput v-model.number.lazy="model.chipRate" align="right" @blur="onBlurChipRate" />
-            <label>点相当</label>
+            <Label>点相当</Label>
           </FormField>
-        </Item>
-        <Item>
-          <SectionTitle>結果</SectionTitle>
-          <Grid gap="12px">
-            <FormField v-for="(player, i) in players" :key="i">
-              <label>{{ player }}</label>
-              <SectionTitle>{{ toPrice(i) }}円</SectionTitle>
-            </FormField>
-          </Grid>
-        </Item>
-        <Item>
-          <SectionTitle>その他</SectionTitle>
+        </FormGroup>
+        <FormGroup title="結果">
+          <FormField v-for="(player, i) in players" :key="i">
+            <Label>{{ player }}</Label>
+            <Label bold strong>{{ toPrice(i) }}円</Label>
+          </FormField>
+        </FormGroup>
+        <FormGroup title="その他">
           <FormField>
             <Switch v-model="editable" name="editable">編集を許可する</Switch>
             <Button small @click="onShare">シェア</Button>
           </FormField>
           <FormField>
-            <TextInput v-model="model.fileName" placeholder="ファイル名" />
+            <TextInput v-model="model.fileName" placeholder="Please file name..." />
             <Button small @click="onDownload">画像化</Button>
           </FormField>
-        </Item>
+        </FormGroup>
       </Grid>
     </Grid>
     <template #footer>
@@ -56,9 +50,9 @@ import Button from '@/components/atoms/Button.vue'
 import FormField from '@/components/atoms/FormField.vue'
 import TextInput from '@/components/atoms/TextInput.vue'
 import Switch from '@/components/atoms/Switch.vue'
-import SectionTitle from '@/components/atoms/SectionTitle.vue'
 import Grid from '@/components/atoms/Grid.vue'
-import Item from '@/components/atoms/Item.vue'
+import Label from '@/components/atoms/Label.vue'
+import FormGroup from '@/components/molecules/FormGroup.vue'
 import ModalBase from '@/components/molecules/ModalBase.vue'
 
 export default {
@@ -68,9 +62,9 @@ export default {
     FormField,
     TextInput,
     Switch,
-    SectionTitle,
     Grid,
-    Item,
+    Label,
+    FormGroup,
     ModalBase,
   },
   props: {

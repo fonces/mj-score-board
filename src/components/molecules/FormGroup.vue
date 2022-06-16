@@ -1,15 +1,16 @@
 <template>
-  <div class="error">
-    {{ message }}
+  <div class="form-group">
+    <div class="title bold">{{ title }}</div>
+    <slot />
   </div>
 </template>
 
 <script>
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
-  name: 'Error',
+  name: 'FormGroup',
   props: {
-    message: {
+    title: {
       type: String,
       required: true,
     },
@@ -18,9 +19,12 @@ export default {
 </script>
 
 <style scoped>
-.error {
-  color: var(--error);
-  font-size: 13px;
-  font-weight: bold;
+.form-group {
+  display: grid;
+  gap: 8px;
+}
+
+.title {
+  font-size: 16px;
 }
 </style>

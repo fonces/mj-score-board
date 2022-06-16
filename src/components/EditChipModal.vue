@@ -3,27 +3,25 @@
     <Grid gap="24px">
       <Actions>
         <Button @click="onClear">クリア</Button>
-        <Error v-if="diff" :message="`${diff}枚差分があります`" />
+        <Label v-if="diff" bold error>{{ `${diff}枚差分があります` }}</Label>
       </Actions>
-      <Item>
-        <SectionTitle>チップ</SectionTitle>
+      <FormGroup title="チップ">
         <FormField :columns="['max-content', '1fr', 'max-content']">
-          <label>1枚:</label>
+          <Label>1枚:</Label>
           <TextInput v-model.number="model.chipRate" type="tel" align="right" @blur="onBlurChipRate" />
-          <label>点相当</label>
+          <Label>点相当</Label>
         </FormField>
-      </Item>
+      </FormGroup>
       <Grid>
-        <Item v-for="(player, i) in players" :key="i">
-          <SectionTitle>{{ player }}</SectionTitle>
+        <FormGroup v-for="(player, i) in players" :key="i" :title="player">
           <FormField>
             <TextInput v-model.number="model.chips[i]" align="right" @blur="onBlur(i)" />
-            <label>枚</label>
+            <Label>枚</Label>
             <Button v-if="model.chips[i] === 0 && diff" small @click="onAutoComplete(i)">
               自動入力
             </Button>
           </FormField>
-        </Item>
+        </FormGroup>
       </Grid>
     </Grid>
     <template #footer>
@@ -38,12 +36,11 @@ import { reactive, computed } from 'vue'
 import { fill, sum } from '@/utils/array'
 import Actions from '@/components/atoms/Actions.vue'
 import Button from '@/components/atoms/Button.vue'
-import Error from '@/components/atoms/Error.vue'
 import FormField from '@/components/atoms/FormField.vue'
 import TextInput from '@/components/atoms/TextInput.vue'
-import SectionTitle from '@/components/atoms/SectionTitle.vue'
 import Grid from '@/components/atoms/Grid.vue'
-import Item from '@/components/atoms/Item.vue'
+import Label from '@/components/atoms/Label.vue'
+import FormGroup from '@/components/molecules/FormGroup.vue'
 import ModalBase from '@/components/molecules/ModalBase.vue'
 
 export default {
@@ -51,12 +48,11 @@ export default {
   components: {
     Actions,
     Button,
-    Error,
     FormField,
     TextInput,
-    SectionTitle,
     Grid,
-    Item,
+    Label,
+    FormGroup,
     ModalBase,
   },
   props: {
