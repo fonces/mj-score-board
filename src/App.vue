@@ -6,6 +6,7 @@
 import { pageview } from 'vue-gtag'
 import '@/assets/reset.css'
 import '@/assets/root.css'
+import { useFillViewHeight } from '@/utils/window'
 import ScoreTable from '@/components/ScoreTable.vue'
 
 export default {
@@ -14,6 +15,7 @@ export default {
     ScoreTable,
   },
   setup() {
+    useFillViewHeight()
     pageview('/index')
   },
 }
@@ -31,6 +33,7 @@ body {
 #app {
   overflow: scroll;
   height: 100vh;
+  height: calc(var(--vh, 1vh) * 100);
 }
 
 #app::-webkit-scrollbar {
