@@ -1,6 +1,6 @@
 <template>
   <ModalBase class="edit-chips-modal" title="チップ編集" @close="onClose">
-    <List gap="24px">
+    <Grid gap="24px">
       <Actions>
         <Button @click="onClear">クリア</Button>
         <Error v-if="diff" :message="`${diff}枚差分があります`" />
@@ -13,7 +13,7 @@
           <label>点相当</label>
         </FormField>
       </Item>
-      <List>
+      <Grid>
         <Item v-for="(player, i) in players" :key="i">
           <SectionTitle>{{ player }}</SectionTitle>
           <FormField>
@@ -24,8 +24,8 @@
             </Button>
           </FormField>
         </Item>
-      </List>
-    </List>
+      </Grid>
+    </Grid>
     <template #footer>
       <Button @click="onClose">キャンセル</Button>
       <Button primary :disabled="diff" @click="onSave">保存</Button>
@@ -42,7 +42,7 @@ import Error from '@/components/atoms/Error.vue'
 import FormField from '@/components/atoms/FormField.vue'
 import TextInput from '@/components/atoms/TextInput.vue'
 import SectionTitle from '@/components/atoms/SectionTitle.vue'
-import List from '@/components/atoms/List.vue'
+import Grid from '@/components/atoms/Grid.vue'
 import Item from '@/components/atoms/Item.vue'
 import ModalBase from '@/components/molecules/ModalBase.vue'
 
@@ -55,7 +55,7 @@ export default {
     FormField,
     TextInput,
     SectionTitle,
-    List,
+    Grid,
     Item,
     ModalBase,
   },

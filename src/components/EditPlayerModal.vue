@@ -1,7 +1,7 @@
 <template>
   <ModalBase class="edit-player-modal" title="プレイヤー編集" @close="onClose">
-    <List gap="24px">
-      <List>
+    <Grid gap="24px">
+      <Grid>
         <FormField v-for="(player, i) in model.players" :key="i">
           <TextInput
             v-model.trim="model.players[i]"
@@ -13,8 +13,8 @@
             @click="onDelete(i)"
           />
         </FormField>
-      </List>
-    </List>
+      </Grid>
+    </Grid>
     <template #footer>
       <Button @click="onClose">キャンセル</Button>
       <Button primary @click="onSave">保存</Button>
@@ -27,7 +27,7 @@ import { reactive, computed, watch } from 'vue'
 import CrossIcon from '@/components/icons/CrossIcon.vue'
 import Button from '@/components/atoms/Button.vue'
 import TextInput from '@/components/atoms/TextInput.vue'
-import List from '@/components/atoms/List.vue'
+import Grid from '@/components/atoms/Grid.vue'
 import FormField from '@/components/atoms/FormField.vue'
 import ModalBase from '@/components/molecules/ModalBase.vue'
 
@@ -37,7 +37,7 @@ export default {
     CrossIcon,
     Button,
     TextInput,
-    List,
+    Grid,
     FormField,
     ModalBase,
   },

@@ -1,5 +1,5 @@
 <template>
-  <div class="list" :style="{ gap }">
+  <div class="grid" :style="{ gap }">
     <slot />
   </div>
 </template>
@@ -7,7 +7,7 @@
 <script>
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
-  name: 'List',
+  name: 'Grid',
   props: {
     gap: {
       type: String,
@@ -18,7 +18,7 @@ export default {
 </script>
 
 <style scoped>
-.list {
+.grid {
   display: grid;
 }
 </style>

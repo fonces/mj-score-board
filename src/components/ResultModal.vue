@@ -1,7 +1,7 @@
 <template>
   <ModalBase class="result-modal" title="結果" @close="onClose">
-    <List gap="24px">
-      <List gap="24px">
+    <Grid gap="24px">
+      <Grid gap="24px">
         <Item>
           <SectionTitle>レート</SectionTitle>
           <FormField :columns="['max-content', '1fr', 'max-content']">
@@ -20,12 +20,12 @@
         </Item>
         <Item>
           <SectionTitle>結果</SectionTitle>
-          <List gap="12px">
+          <Grid gap="12px">
             <FormField v-for="(player, i) in players" :key="i">
               <label>{{ player }}</label>
               <SectionTitle>{{ toPrice(i) }}円</SectionTitle>
             </FormField>
-          </List>
+          </Grid>
         </Item>
         <Item>
           <SectionTitle>その他</SectionTitle>
@@ -38,8 +38,8 @@
             <Button small @click="onDownload">画像化</Button>
           </FormField>
         </Item>
-      </List>
-    </List>
+      </Grid>
+    </Grid>
     <template #footer>
       <Button @click="onClose">キャンセル</Button>
       <Button primary @click="onReset">戦績クリア</Button>
@@ -57,7 +57,7 @@ import FormField from '@/components/atoms/FormField.vue'
 import TextInput from '@/components/atoms/TextInput.vue'
 import Switch from '@/components/atoms/Switch.vue'
 import SectionTitle from '@/components/atoms/SectionTitle.vue'
-import List from '@/components/atoms/List.vue'
+import Grid from '@/components/atoms/Grid.vue'
 import Item from '@/components/atoms/Item.vue'
 import ModalBase from '@/components/molecules/ModalBase.vue'
 
@@ -69,7 +69,7 @@ export default {
     TextInput,
     Switch,
     SectionTitle,
-    List,
+    Grid,
     Item,
     ModalBase,
   },
