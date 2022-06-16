@@ -1,5 +1,5 @@
 <template>
-  <ModalBase class="edit-player-modal" title="プレイヤー編集" @close="onClose">
+  <ModalBase class="edit-player-modal" title="プレイヤー名編集" @close="onClose">
     <Grid gap="24px">
       <Grid>
         <FormField v-for="(player, i) in model.players" :key="i">
@@ -8,10 +8,13 @@
             :disabled="model.deleted.includes(i)"
             placeholder="Please player name..."
           />
-          <CrossIcon
+          <Button
+            small
             :class="{ undeletable: model.deleted.includes(i) || isLastIndex(i) }"
             @click="onDelete(i)"
-          />
+          >
+            <TrashIcon />
+          </Button>
         </FormField>
       </Grid>
     </Grid>
@@ -24,11 +27,11 @@
 
 <script>
 import { reactive, computed, watch } from 'vue'
+import TrashIcon from 'vue-material-design-icons/TrashCanOutline.vue'
 import Button from '@/components/atoms/Button.vue'
 import Grid from '@/components/atoms/Grid.vue'
 import TextInput from '@/components/atoms/TextInput.vue'
 import FormField from '@/components/atoms/FormField.vue'
-import CrossIcon from '@/components/icons/CrossIcon.vue'
 import ModalBase from '@/components/molecules/ModalBase.vue'
 
 export default {
@@ -38,7 +41,7 @@ export default {
     FormField,
     Grid,
     TextInput,
-    CrossIcon,
+    TrashIcon,
     ModalBase,
   },
   props: {
@@ -74,7 +77,7 @@ export default {
 </script>
 
 <style scoped>
-.cross.undeletable {
+.undeletable {
   visibility: hidden;
 }
 </style>

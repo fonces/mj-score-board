@@ -2,7 +2,9 @@
   <div class="modal-base">
     <header>
       <div class="title bold">{{ title }}</div>
-      <CrossIcon @click="$emit('close')" />
+      <Button flat @click="$emit('close')">
+        <CloseIcon :size="32" />
+      </Button>
     </header>
     <main>
       <slot />
@@ -14,12 +16,14 @@
 </template>
 
 <script>
-import CrossIcon from '@/components/icons/CrossIcon.vue'
+import CloseIcon from 'vue-material-design-icons/Close.vue'
+import Button from '@/components/atoms/Button.vue'
 
 export default {
   name: 'ModalBase',  
   components: {
-    CrossIcon,
+    CloseIcon,
+    Button,
   },
   props: {
     title: {
@@ -47,7 +51,7 @@ export default {
 
 .title {
   font-size: 18px;
-  margin-left: 24px;
+  margin-left: 40px;
   text-align: center;
 }
 
@@ -65,7 +69,6 @@ footer {
 }
 
 header {
-  border-bottom: 1px solid var(--border);
   grid-template-columns: 1fr max-content;
   height: 48px;
   filter: drop-shadow(0 1px 2px var(--gray));
@@ -79,7 +82,6 @@ main {
 }
 
 footer {
-  border-top: 1px solid var(--border);
   bottom: 0;
   filter: drop-shadow(-1px 0 2px var(--gray));
   grid-template-columns: 1fr;

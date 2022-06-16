@@ -2,7 +2,9 @@
   <ModalBase class="edit-score-modal" :title="`スコア編集 - ${scoreIndex + 1}回戦`" @close="onClose">
     <Grid gap="24px">
       <Flex direction="row-reverse">
-        <Button small @click="onClear">クリア</Button>
+        <Button flat @click="onClear">
+          <RestoreIcon />
+        </Button>
         <Label v-if="diff" bold error>{{ `${diff}ポイント差分があります` }}</Label>
       </Flex>
       <Grid>
@@ -26,6 +28,7 @@
 <script>
 import { reactive, computed } from 'vue'
 import { fill, sum } from '@/utils/array'
+import RestoreIcon from 'vue-material-design-icons/Restore.vue'
 import Button from '@/components/atoms/Button.vue'
 import FormField from '@/components/atoms/FormField.vue'
 import Flex from '@/components/atoms/Flex.vue'
@@ -38,6 +41,7 @@ import ModalBase from '@/components/molecules/ModalBase.vue'
 export default {
   name: 'EditScoreModal',
   components: {
+    RestoreIcon,
     Button,
     FormField,
     Flex,

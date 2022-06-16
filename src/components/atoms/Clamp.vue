@@ -20,7 +20,8 @@ export default {
 <style scoped>
 .clamp {
   display: -webkit-box;
-  -webkit-box-orient: vertical;
+  line-height: 1.2;
   overflow: hidden;
+  -webkit-box-orient: vertical;
 }
 </style>

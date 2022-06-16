@@ -41,7 +41,7 @@ body {
 }
 
 #app.printing {
-  background: var(--therd);
+  background: var(--third);
   height: min-content !important;
   width: min-content !important;
   padding: 16px;

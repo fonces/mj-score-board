@@ -2,12 +2,14 @@
   <ModalBase class="edit-chips-modal" title="チップ編集" @close="onClose">
     <Grid gap="24px">
       <Flex direction="row-reverse">
-        <Button small @click="onClear">クリア</Button>
+        <Button flat @click="onClear">
+          <RestoreIcon />
+        </Button>
         <Label v-if="diff" bold error>{{ `${diff}枚差分があります` }}</Label>
       </Flex>
       <FormGroup title="チップ">
         <FormField :columns="['max-content', '1fr', 'max-content']">
-          <Label>1枚:</Label>
+          <Label>1枚</Label>
           <TextInput v-model.number="model.chipRate" type="tel" align="right" @blur="onBlurChipRate" />
           <Label>点相当</Label>
         </FormField>
@@ -34,6 +36,7 @@
 <script>
 import { reactive, computed } from 'vue'
 import { fill, sum } from '@/utils/array'
+import RestoreIcon from 'vue-material-design-icons/Restore.vue'
 import Button from '@/components/atoms/Button.vue'
 import FormField from '@/components/atoms/FormField.vue'
 import Flex from '@/components/atoms/Flex.vue'
@@ -46,6 +49,7 @@ import ModalBase from '@/components/molecules/ModalBase.vue'
 export default {
   name: 'EditChipModal',
   components: {
+    RestoreIcon,
     Button,
     FormField,
     Flex,

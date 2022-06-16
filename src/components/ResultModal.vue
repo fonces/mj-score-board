@@ -4,34 +4,40 @@
       <Grid gap="24px">
         <FormGroup title="レート">
           <FormField :columns="['max-content', '1fr', 'max-content']">
-            <Label>1000点:</Label>
+            <Label>1000点</Label>
             <TextInput v-model.number.lazy="model.rate" type="tel" align="right" @blur="onBlur" />
             <Label>円</Label>
           </FormField>
         </FormGroup>
         <FormGroup title="チップ">
           <FormField :columns="['max-content', '1fr', 'max-content']">
-            <Label>1枚:</Label>
+            <Label>1枚</Label>
             <TextInput v-model.number.lazy="model.chipRate" align="right" @blur="onBlurChipRate" />
             <Label>点相当</Label>
           </FormField>
         </FormGroup>
         <FormGroup title="結果">
           <table>
-            <tr v-for="({ player, price }, i) in results" :key="i">
-              <th class="bold">{{ player }}</th>
-              <td class="bold" :class="{ minus: price < 0 }">{{ price.toLocaleString() }}円</td>
+            <tr v-for="({ player, price }, i) in results" :key="i" class="bold">
+              <th>{{ player }}</th>
+              <td :class="{ minus: price < 0 }">{{ price.toLocaleString() }}円</td>
             </tr>
           </table>
         </FormGroup>
-        <FormGroup title="その他">
+        <FormGroup title="シェア">
           <FormField>
             <Switch v-model="editable" name="editable">編集を許可する</Switch>
-            <Button small @click="onShare">シェア</Button>
+            <Button small @click="onShare">
+              <ShareIcon />
+            </Button>
           </FormField>
+        </FormGroup>
+        <FormGroup title="画像で出力">
           <FormField>
             <TextInput v-model="model.fileName" placeholder="Please file name..." />
-            <Button small @click="onDownload">画像化</Button>
+            <Button small @click="onDownload">
+              <DownloadIcon />
+            </Button>
           </FormField>
         </FormGroup>
       </Grid>
@@ -48,6 +54,8 @@ import { reactive, computed, ref } from 'vue'
 import { event } from 'vue-gtag'
 import { v4 as uuid } from 'uuid'
 import html2canvas from 'html2canvas'
+import DownloadIcon from 'vue-material-design-icons/Download.vue'
+import ShareIcon from 'vue-material-design-icons/Share.vue'
 import Button from '@/components/atoms/Button.vue'
 import FormField from '@/components/atoms/FormField.vue'
 import Grid from '@/components/atoms/Grid.vue'
@@ -60,6 +68,8 @@ import ModalBase from '@/components/molecules/ModalBase.vue'
 export default {
   name: 'ResultModal',
   components: {
+    DownloadIcon,
+    ShareIcon,
     Button,
     FormField,
     Grid,
@@ -94,15 +104,12 @@ export default {
     return {
       model,
       editable: editableRef,
-      results: computed(() => props.players.map((player, i) => {
-        const point = props.scores.reduce((acc, score) => (
+      results: computed(() => props.players.map((player, i) => ({
+        player,
+        price: props.scores.reduce((acc, score) => (
           acc + score[i]
-        ), 0) + (props.chips[i] * (model.chipRate / 1000))
-        return {
-          player,
-          price: point * model.rate,
-        }
-      })),
+        ), props.chips[i] * (model.chipRate / 1000)) * model.rate,
+      }))),
       onBlur: () => !Number.isInteger(model.rate) && (model.rate = 50),
       onBlurChipRate: () => (!Number.isInteger(model.chipRate) || model.chipRate % 1000 !== 0) && (model.chipRate = props.chipRate),
       onShare: () => {
@@ -158,7 +165,7 @@ tr {
   border: 1px solid var(--primary);
 }
 
-tr:nth-child(odd) {
+tr:nth-child(even) {
   background: var(--secondary);
 }
 

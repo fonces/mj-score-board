@@ -1,22 +1,26 @@
 :root {
-  --white: #fff;
+  --white: #fefefe;
   --gray: #ccc;
-  --black: #333;
+  --black: #444;
 
   --primary: #0099ff;
-  --secondary: #CFEDFF;
-  --therd: #f0f8ff;
+  --secondary: #cfedff;
+  --third: #f0f8ff;
   --border: #666;
-  --disabled: #ddd;
+  --disabled: #eee;
   --alert: #ffcccc;
   --error: #ff4500;
   --shadow: rgb(0 0 0 / 15%);
 
-  --base-bg: #fefefe;
-  --overflow-bg: var(--therd);
+  --base-bg: var(--white);
+  --overflow-bg: var(--third);
   --base-text: var(--black);
 }
 
 .bold {
   font-weight: bold;
+}
+
+.material-design-icon {
+  display: flex;
 }
