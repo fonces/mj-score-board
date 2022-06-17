@@ -3,28 +3,29 @@
     <Grid class="card">
       <AlertOutlineIcon v-if="type === 'warning'" :size="32" />
       <Label bold class="message">{{ message }}</Label>
-      <Grid flow="column">
+      <Flex gap="16px">
         <Button @click="resolve(false)">キャンセル</Button>
         <Button @click="resolve(true)" primary>OK</Button>
-      </Grid>
+      </Flex>
     </Grid>
   </div>
 </template>
 
 <script>
-import { defineComponent } from 'vue'
 import { asyncRenderProps } from '@/utils/vue'
 import AlertOutlineIcon from 'vue-material-design-icons/AlertOutline.vue'
 import Button from '@/components/atoms/Button.vue'
+import Flex from '@/components/atoms/Flex.vue'
 import Grid from '@/components/atoms/Grid.vue'
 import Label from '@/components/atoms/Label.vue'
 
-export default defineComponent({
+export default {
   // eslint-disable-next-line vue/multi-word-component-names
   name: 'Dialog',
   components: {
     AlertOutlineIcon,
     Button,
+    Flex,
     Grid,
     Label,
   },
@@ -39,7 +40,7 @@ export default defineComponent({
       required: true,
     },
   },
-})
+}
 </script>
 
 <style scoped>

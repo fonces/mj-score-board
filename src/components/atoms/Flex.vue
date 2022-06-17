@@ -4,6 +4,7 @@
     :style="{
       alignItems: align,
       flexDirection: direction,
+      gap,
       justifyContent: justify,
     }"
   >
@@ -23,6 +24,9 @@ export default {
     direction: {
       type: String,
       default: 'row',
+    },
+    gap: {
+      type: String,
     },
     justify: {
       type: String,
