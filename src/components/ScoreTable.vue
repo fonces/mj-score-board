@@ -1,7 +1,7 @@
 <template>
   <table>
     <thead>
-      <tr @click="modal.player = true">
+      <tr class="head" @click="modal.player = true">
         <th />
         <th v-for="(player, i) in model.players" :key="i">
           <Clamp>{{ player }}</Clamp>
@@ -12,6 +12,7 @@
       <tr
         v-for="(score, i) in model.scores"
         :key="i"
+        class="body"
         :class="{ diff: sum(score) }"
         @click="(modal.score = true) && (modal.scoreIndex = i)"
       >
@@ -28,7 +29,7 @@
       </tr>
     </tbody>
     <tfoot>
-      <tr class="summary" :class="{ diff: sum(summaries) }" @click="modal.result = true">
+      <tr class="foot summary" :class="{ diff: sum(summaries) }" @click="modal.result = true">
         <th>合計</th>
         <td v-for="(summary, i) in summaries" class="bold" :key="i">
           {{ toFormat(summary) }}
@@ -237,41 +238,38 @@ table {
   min-width: 100%;
 }
 
-thead,
-tbody,
-tfoot,
+.head,
+.body,
+.foot,
 th,
 td {
   background: var(--base-bg);
 }
 
-thead,
-tfoot {
+.head,
+.head th:first-child,
+.foot {
   position: sticky;
   z-index: 3;
 }
 
-thead {
-  top: 0;
-}
-tfoot {
-  bottom: 0;
-}
-
-thead th,
-thead td {
+.head th,
+.head td {
   border-bottom: 1px solid var(--primary);
   box-shadow: -1px 3px 3px var(--shadow);
+  position: sticky;
+  top: 0;
 }
 
-tbody th {
+.body th {
   box-shadow: 3px 0 3px var(--shadow);
 }
 
-tfoot th,
-tfoot td {
+.foot th,
+.foot td {
   bottom: 0;
   box-shadow: 0 -3px 3px var(--shadow);
+  position: sticky;
 }
 
 th, td {
@@ -287,8 +285,8 @@ tr {
   height: 48px;
 }
 
-tbody tr:nth-child(odd) th,
-tbody tr:nth-child(odd) td {
+tr.body:nth-child(odd) th,
+tr.body:nth-child(odd) td {
   background: var(--secondary);
 }
 
@@ -310,8 +308,8 @@ tr.diff td {
   background: var(--alert) !important;
 }
 
-tbody tr:first-child th,
-tbody tr:first-child td {
+.body tr:first-child th,
+.body tr:first-child td {
   border-top: none;
 }
 
