@@ -86,8 +86,10 @@
 import { reactive, computed, ref, watch, onBeforeMount } from 'vue'
 import { fill, split, sum } from '@/utils/array'
 import { toFormat, toSymbol } from '@/utils/string'
+import { asyncRender } from '@/utils/vue'
 import Animate, { ANIMATION } from '@/components/atoms/Animate.vue'
 import Clamp from '@/components/atoms/Clamp.vue'
+import Dialog from '@/components/molecules/Dialog.vue'
 import EditChipModal from '@/components/EditChipModal.vue'
 import EditPlayerModal from '@/components/EditPlayerModal.vue'
 import EditScoreModal from '@/components/EditScoreModal.vue'
@@ -226,13 +228,21 @@ export default {
         model.chipRate = chipRate
         modal.chip = false
       },
-      onReset: () => {
-        const { players, scores, chips, chipRate } = createDefault()
-        model.players = players
-        model.scores = scores
-        model.chips = chips
-        model.chipRate = chipRate
-        modal.result = false
+      onReset: async () => {
+        if (await asyncRender(Dialog, {
+          props: {
+            type: 'warning',
+            message: '戦績をクリアします。\nよろしいですか？',
+          },
+          target: '#dialog'
+        })) {
+          const { players, scores, chips, chipRate } = createDefault()
+          model.players = players
+          model.scores = scores
+          model.chips = chips
+          model.chipRate = chipRate
+          modal.result = false
+        }
       },
     }
   },

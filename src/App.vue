@@ -46,4 +46,12 @@ body {
   width: min-content !important;
   padding: 16px;
 }
+
+#modal {
+  z-index: 100;
+}
+
+#dialog {
+  z-index: 200;
+}
 </style>

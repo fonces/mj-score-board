@@ -1,5 +1,5 @@
 <template>
-  <div class="grid" :style="{ gap }">
+  <div class="grid" :style="{ gap, gridAutoFlow: flow }">
     <slot />
   </div>
 </template>
@@ -13,6 +13,10 @@ export default {
       type: String,
       default: '16px',
     },
+    flow: {
+      type: String,
+      default: 'row',
+    }
   },
 }
 </script>

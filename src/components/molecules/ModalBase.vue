@@ -44,7 +44,7 @@ export default {
   position: fixed;
   top: 0;
   width: 100%;
-  z-index: 999;
+  z-index: inherit;
 }
 
 .modal-base::-webkit-scrollbar,
