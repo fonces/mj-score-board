@@ -39,37 +39,45 @@
   </table>
   <teleport to="#modal">
     <template v-if="isEditable">
-      <EditPlayerModal
-        v-if="modal.player"
-        :players="model.players"
-        @save="onSaveEditPlayer"
-        @close="modal.player = false"
-      />
-      <EditScoreModal
-        v-if="modal.score"
-        :players="model.players"
-        :score="model.scores[modal.scoreIndex]"
-        :score-index="modal.scoreIndex"
-        @save="onSaveEditScore"
-        @close="modal.score = false"
-      />
-      <EditChipModal
-        v-if="modal.chip"
-        :players="model.players"
-        :chips="model.chips"
-        :chip-rate="model.chipRate"
-        @save="onSaveEditChip"
-        @close="modal.chip = false"
-      />
-      <ResultModal
-        v-if="modal.result"
-        :players="model.players"
-        :scores="model.scores"
-        :chips="model.chips"
-        :chip-rate="model.chipRate"
-        @reset="onReset"
-        @close="modal.result = false"
-      />
+      <Animate :name="ANIMATION.SLIDE_DOWN">
+        <EditPlayerModal
+          v-if="modal.player"
+          :players="model.players"
+          @save="onSaveEditPlayer"
+          @close="modal.player = false"
+        />
+      </Animate>
+      <Animate :name="ANIMATION.SLIDE_LEFT">
+        <EditScoreModal
+          v-if="modal.score"
+          :players="model.players"
+          :score="model.scores[modal.scoreIndex]"
+          :score-index="modal.scoreIndex"
+          @save="onSaveEditScore"
+          @close="modal.score = false"
+        />
+      </Animate>
+      <Animate :name="ANIMATION.SLIDE_LEFT">
+        <EditChipModal
+          v-if="modal.chip"
+          :players="model.players"
+          :chips="model.chips"
+          :chip-rate="model.chipRate"
+          @save="onSaveEditChip"
+          @close="modal.chip = false"
+        />
+      </Animate>
+      <Animate :name="ANIMATION.SLIDE_UP">
+        <ResultModal
+          v-if="modal.result"
+          :players="model.players"
+          :scores="model.scores"
+          :chips="model.chips"
+          :chip-rate="model.chipRate"
+          @reset="onReset"
+          @close="modal.result = false"
+        />
+      </Animate>
     </template>
   </teleport>
 </template>
@@ -78,6 +86,7 @@
 import { reactive, computed, ref, watch, onBeforeMount } from 'vue'
 import { fill, split, sum } from '@/utils/array'
 import { toFormat, toSymbol } from '@/utils/string'
+import Animate, { ANIMATION } from '@/components/atoms/Animate.vue'
 import Clamp from '@/components/atoms/Clamp.vue'
 import EditChipModal from '@/components/EditChipModal.vue'
 import EditPlayerModal from '@/components/EditPlayerModal.vue'
@@ -94,6 +103,7 @@ const createDefault = () => ({
 export default {
   name: 'ScoreTable',
   components: {
+    Animate,
     Clamp,
     EditChipModal,
     EditScoreModal,
@@ -180,6 +190,7 @@ export default {
     )
 
     return {
+      ANIMATION,
       sum,
       toFormat,
       toSymbol,
@@ -236,6 +247,7 @@ table {
   border-bottom: 1px solid var(--primary);
   font-size: 16px;
   min-width: 100%;
+  user-select: none;
 }
 
 .head,

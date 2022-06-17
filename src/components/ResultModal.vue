@@ -161,6 +161,10 @@ export default {
 </script>
 
 <style scoped>
+table {
+  user-select: none;
+}
+
 tr {
   border: 1px solid var(--primary);
 }
