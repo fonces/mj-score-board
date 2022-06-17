@@ -97,6 +97,7 @@ header {
 
 main {
   height: 100%;
+  overflow: scroll;
   padding: 16px;
 }
 
