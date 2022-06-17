@@ -21,7 +21,7 @@
           {{ toFormat(point) }}
         </td>
       </tr>
-      <tr :class="{ diff: sum(model.chips) }" @click="modal.chip = true">
+      <tr class="body" :class="{ diff: sum(model.chips) }" @click="modal.chip = true">
         <th>チップ</th>
         <td v-for="(chip, i) in model.chips" :key="i">
           {{ toSymbol(chip) }}枚

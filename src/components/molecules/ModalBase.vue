@@ -1,17 +1,19 @@
 <template>
   <div class="modal-base">
-    <header>
-      <div class="title bold">{{ title }}</div>
-      <Button flat @click="$emit('close')">
-        <CloseIcon :size="32" />
-      </Button>
-    </header>
-    <main>
-      <slot />
-    </main>
-    <footer>
-      <slot name="footer" />
-    </footer>
+    <div class="container">
+      <header>
+        <div class="title bold">{{ title }}</div>
+        <Button flat @click="$emit('close')">
+          <CloseIcon :size="32" />
+        </Button>
+      </header>
+      <main>
+        <slot />
+      </main>
+      <footer>
+        <slot name="footer" />
+      </footer>
+    </div>
   </div>
 </template>
 
@@ -35,18 +37,29 @@ export default {
 
 <style scoped>
 .modal-base {
-  background: var(--base-bg);
+  background: var(--overflow-bg);
+  height: 100%;
+  overflow: hidden;
+  overscroll-behavior: contain;
   position: fixed;
   top: 0;
-  height: 100%;
   width: 100%;
-  overflow: scroll;
-  overscroll-behavior: contain;
   z-index: 999;
 }
 
-.modal-base::-webkit-scrollbar {
+.modal-base::-webkit-scrollbar,
+.container::-webkit-scrollbar {
   display: none;
+}
+
+.container {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  height: 100%;
+  overflow: scroll;
+  overscroll-behavior: contain;
+  position: relative;
 }
 
 .title {
@@ -56,35 +69,43 @@ export default {
 }
 
 header,
-footer {
+footer,
+main {
   background: var(--base-bg);
+}
+
+header,
+footer {
   align-items: center;
   box-sizing: border-box;
   display: grid;
   grid-auto-flow: column;
   justify-content: center;
-  position: fixed;
+  position: sticky;
   width: 100%;
   z-index: 2;
 }
 
 header {
   grid-template-columns: 1fr max-content;
+  box-shadow: -1px 1px 3px var(--shadow);
   height: 48px;
-  filter: drop-shadow(0 1px 2px var(--gray));
+  min-height: 48px;
   padding: 0 16px;
   top: 0;
 }
 
 main {
+  height: 100%;
   padding: 16px;
-  margin: 48px 0 64px 0;
 }
 
 footer {
   bottom: 0;
-  filter: drop-shadow(-1px 0 2px var(--gray));
+  box-shadow: 0 -1px 3px var(--shadow);
   grid-template-columns: 1fr;
+  height: 64px;
+  min-height: 64px;
   padding: 12px 16px;
 }
 </style>
