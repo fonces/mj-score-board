@@ -27,7 +27,6 @@
 
 <script>
 import { reactive, computed } from 'vue'
-import { fill, sum } from '@/utils/array'
 import RestoreIcon from 'vue-material-design-icons/Restore.vue'
 import Button from '@/components/atoms/Button.vue'
 import FormField from '@/components/atoms/FormField.vue'
@@ -37,6 +36,7 @@ import Label from '@/components/atoms/Label.vue'
 import TextInput from '@/components/atoms/TextInput.vue'
 import FormGroup from '@/components/molecules/FormGroup.vue'
 import ModalBase from '@/components/molecules/ModalBase.vue'
+import { fill, sum } from '@/utils/array'
 
 export default {
   name: 'EditScoreModal',

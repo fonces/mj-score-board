@@ -150,7 +150,7 @@ export default {
           const scores = item.scores.split(',')
           const players = item.players.split(',')
 
-          if ((scores.length % players.length)) throw new Error()
+          if ((scores.length !== players.length)) throw new Error()
 
           item.players = item.players.split(',')
           item.scores = split(scores, item.players.length)
@@ -164,7 +164,13 @@ export default {
           }
         }
       } catch(e) {
-        alert('データの読み込みに失敗しました')
+        asyncRender(Dialog, {
+          props: {
+            type: 'error',
+            message: 'データの読み込みに失敗しました。',
+          },
+          target: '#dialog'
+        })
       } finally {
         history.replaceState(null, '', process.env.NODE_ENV === 'production' ? '/mj-score-board/' : '/')
       }
@@ -233,6 +239,7 @@ export default {
           props: {
             type: 'warning',
             message: '戦績をクリアします。\nよろしいですか？',
+            cancellable: true,
           },
           target: '#dialog'
         })) {
@@ -252,7 +259,7 @@ export default {
 <style scoped>
 table {
   border-collapse: separate;
-	border-spacing: 0;
+  border-spacing: 0;
   border-left: 1px solid var(--primary);
   border-bottom: 1px solid var(--primary);
   font-size: 16px;

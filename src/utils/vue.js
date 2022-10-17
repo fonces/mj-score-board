@@ -1,5 +1,11 @@
 import { createApp, h, ref } from 'vue'
 
+/**
+ * コンポーネントをtargetに描画する
+ * @param {Component} component 
+ * @param {Object} param1 
+ * @returns 
+ */
 export const asyncRender = (component, { props, target }) => {  
   const instanceRef = ref(null)
   return new Promise(resolve => {

@@ -2,9 +2,10 @@
   <div class="dialog">
     <Grid class="card">
       <AlertOutlineIcon v-if="type === 'warning'" :size="32" />
+      <AlertOctagramIcon v-if="type === 'error'" :size="32" />
       <Label bold class="message">{{ message }}</Label>
-      <Flex gap="16px">
-        <Button @click="resolve(false)">キャンセル</Button>
+      <Flex justify="center" gap="16px">
+        <Button v-if="cancellable" @click="resolve(false)">キャンセル</Button>
         <Button @click="resolve(true)" primary>OK</Button>
       </Flex>
     </Grid>
@@ -14,6 +15,7 @@
 <script>
 import { asyncRenderProps } from '@/utils/vue'
 import AlertOutlineIcon from 'vue-material-design-icons/AlertOutline.vue'
+import AlertOctagramIcon from 'vue-material-design-icons/AlertOctagram.vue'
 import Button from '@/components/atoms/Button.vue'
 import Flex from '@/components/atoms/Flex.vue'
 import Grid from '@/components/atoms/Grid.vue'
@@ -24,6 +26,7 @@ export default {
   name: 'Dialog',
   components: {
     AlertOutlineIcon,
+    AlertOctagramIcon,
     Button,
     Flex,
     Grid,
@@ -33,11 +36,15 @@ export default {
     ...asyncRenderProps,
     type: {
       type: String,
-      validator: v => ['warning'].includes(v),
+      validator: v => ['warning', 'error'].includes(v),
     },
     message: {
       type: String,
       required: true,
+    },
+    cancellable: {
+      type: Boolean,
+      default: false,
     },
   },
 }
@@ -62,6 +69,7 @@ export default {
   background: var(--base-bg);
   border-radius: 4px;
   height: min-content;
+  min-width: 256px;
   padding: 24px 16px 16px 16px;
   width: min-content;
 }
