@@ -73,7 +73,7 @@
           :players="model.players"
           :scores="model.scores"
           :chips="model.chips"
-          :chip-rate="model.chipRate"
+          v-model:chip-rate="model.chipRate"
           @reset="onReset"
           @close="modal.result = false"
         />

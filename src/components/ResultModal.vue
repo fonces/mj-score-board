@@ -87,6 +87,7 @@ const props = defineProps({
 const emit = defineEmits<{
   (e: 'reset'): void
   (e: 'close'): void
+  (e: 'update:chipRate', value: number): void
 }>()
 
 const model = reactive({ rate: 50, chipRate: props.chipRate, fileName: '' })
@@ -100,8 +101,13 @@ const results = computed(() => props.players.map((player, i) => ({
 })))
 
 const onBlur = () => !Number.isInteger(model.rate) && (model.rate = 50)
-const onBlurChipRate = () =>
-  (!Number.isInteger(model.chipRate) || model.chipRate % 1000 !== 0) && (model.chipRate = props.chipRate)
+const onBlurChipRate = () => {
+  if (!Number.isInteger(model.chipRate) || model.chipRate % 1000 !== 0) {
+    model.chipRate = props.chipRate
+  } else {
+    emit('update:chipRate', model.chipRate)
+  }
+}
 
 const onShare = () => {
   const url = new URL(location.pathname, location.href)
