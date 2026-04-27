@@ -50,7 +50,7 @@
 </template>
 
 <script setup lang="ts">
-import { reactive, computed, ref, PropType } from 'vue'
+import { reactive, computed, ref } from 'vue'
 import { event } from 'vue-gtag'
 import { v4 as uuid } from 'uuid'
 import html2canvas from 'html2canvas'
@@ -64,48 +64,34 @@ import Switch from '@/components/atoms/Switch.vue'
 import TextInput from '@/components/atoms/TextInput.vue'
 import FormGroup from '@/components/molecules/FormGroup.vue'
 import ModalBase from '@/components/molecules/ModalBase.vue'
+import Dialog from '@/components/molecules/Dialog.vue'
+import { asyncRender } from '@/utils/vue'
+import { useStore } from '@/store'
 
-const props = defineProps({
-  players: {
-    type: Array as PropType<string[]>,
-    required: true,
-  },
-  scores: {
-    type: Array as PropType<number[][]>,
-    required: true,
-  },
-  chips: {
-    type: Array as PropType<number[]>,
-    required: true,
-  },
-  chipRate: {
-    type: Number,
-    required: true,
-  },
-})
+const emit = defineEmits<{ (e: 'close'): void }>()
 
-const emit = defineEmits<{
-  (e: 'reset'): void
-  (e: 'close'): void
-  (e: 'update:chipRate', value: number): void
-}>()
+const store = useStore()
 
-const model = reactive({ rate: 50, chipRate: props.chipRate, fileName: '' })
+const players = computed(() => store.state.players)
+const scores = computed(() => store.state.scores)
+const chips = computed(() => store.state.chips)
+
+const model = reactive({ rate: 50, chipRate: store.state.chipRate, fileName: '' })
 const editable = ref(false)
 
-const results = computed(() => props.players.map((player, i) => ({
+const results = computed(() => players.value.map((player, i) => ({
   player,
-  price: props.scores.reduce((acc, score) => (
+  price: scores.value.reduce((acc, score) => (
     acc + score[i]
-  ), props.chips[i] * (model.chipRate / 1000)) * model.rate,
+  ), chips.value[i] * (model.chipRate / 1000)) * model.rate,
 })))
 
 const onBlur = () => !Number.isInteger(model.rate) && (model.rate = 50)
 const onBlurChipRate = () => {
   if (!Number.isInteger(model.chipRate) || model.chipRate % 1000 !== 0) {
-    model.chipRate = props.chipRate
+    model.chipRate = store.state.chipRate
   } else {
-    emit('update:chipRate', model.chipRate)
+    store.commit('setChipRate', model.chipRate)
   }
 }
 
@@ -114,9 +100,9 @@ const onShare = () => {
   url.searchParams.set('id', uuid())
   url.searchParams.set('datetime', String(new Date().getTime()))
   url.searchParams.set('editable', String(editable.value))
-  url.searchParams.set('players', String(props.players))
-  url.searchParams.set('scores', String(props.scores))
-  url.searchParams.set('chips', String(props.chips))
+  url.searchParams.set('players', String(players.value))
+  url.searchParams.set('scores', String(scores.value))
+  url.searchParams.set('chips', String(chips.value))
 
   if (typeof navigator.share === 'undefined') {
     if (navigator.clipboard) {
@@ -153,7 +139,19 @@ const onDownload = async () => {
   }
 }
 
-const onReset = () => emit('reset')
+const onReset = async () => {
+  if (await asyncRender<boolean>(Dialog, {
+    props: {
+      type: 'warning',
+      message: '戦績をクリアします。\nよろしいですか？',
+      cancellable: true,
+    },
+    target: '#dialog',
+  })) {
+    store.commit('reset')
+    emit('close')
+  }
+}
 const onClose = () => emit('close')
 </script>
 

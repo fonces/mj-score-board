@@ -34,7 +34,7 @@
 </template>
 
 <script setup lang="ts">
-import { reactive, computed, PropType } from 'vue'
+import { reactive, computed } from 'vue'
 import RestoreIcon from 'vue-material-design-icons/Restore.vue'
 import Button from '@/components/atoms/Button.vue'
 import FormField from '@/components/atoms/FormField.vue'
@@ -45,41 +45,32 @@ import TextInput from '@/components/atoms/TextInput.vue'
 import FormGroup from '@/components/molecules/FormGroup.vue'
 import ModalBase from '@/components/molecules/ModalBase.vue'
 import { fill, sum } from '@/utils/array'
+import { useStore } from '@/store'
 
-const props = defineProps({
-  players: {
-    type: Array as PropType<string[]>,
-    required: true,
-  },
-  chips: {
-    type: Array as PropType<number[]>,
-    required: true,
-  },
-  chipRate: {
-    type: Number,
-    required: true,
-  },
-})
+const emit = defineEmits<{ (e: 'close'): void }>()
 
-const emit = defineEmits<{
-  (e: 'save', payload: { chips: number[]; chipRate: number }): void
-  (e: 'close'): void
-}>()
+const store = useStore()
+
+const players = computed(() => store.state.players)
+const initialChipRate = store.state.chipRate
 
 const model = reactive<{ chips: number[]; chipRate: number }>({
-  chips: [...props.chips],
-  chipRate: props.chipRate,
+  chips: [...store.state.chips],
+  chipRate: initialChipRate,
 })
 const diff = computed(() => sum(model.chips))
 
 const onBlur = (i: number) => !Number.isInteger(model.chips[i]) && (model.chips[i] = 0)
 const onBlurChipRate = () =>
-  (!Number.isInteger(model.chipRate) || model.chipRate % 1000 !== 0) && (model.chipRate = props.chipRate)
+  (!Number.isInteger(model.chipRate) || model.chipRate % 1000 !== 0) && (model.chipRate = initialChipRate)
 const onAutoComplete = (i: number) => model.chips[i] -= diff.value
 const onClear = () => {
-  model.chips = fill<number>(props.players.length)
+  model.chips = fill<number>(players.value.length)
   model.chipRate = 5000
 }
-const onSave = () => emit('save', { ...model, chips: [...model.chips] })
+const onSave = () => {
+  store.commit('saveEditChip', { chips: [...model.chips], chipRate: model.chipRate })
+  emit('close')
+}
 const onClose = () => emit('close')
 </script>

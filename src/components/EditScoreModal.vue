@@ -26,7 +26,7 @@
 </template>
 
 <script setup lang="ts">
-import { reactive, computed, PropType } from 'vue'
+import { reactive, computed } from 'vue'
 import RestoreIcon from 'vue-material-design-icons/Restore.vue'
 import Button from '@/components/atoms/Button.vue'
 import FormField from '@/components/atoms/FormField.vue'
@@ -37,33 +37,26 @@ import TextInput from '@/components/atoms/TextInput.vue'
 import FormGroup from '@/components/molecules/FormGroup.vue'
 import ModalBase from '@/components/molecules/ModalBase.vue'
 import { fill, sum } from '@/utils/array'
+import { useStore } from '@/store'
 
-const props = defineProps({
-  players: {
-    type: Array as PropType<string[]>,
-    required: true,
-  },
-  score: {
-    type: Array as PropType<number[]>,
-    required: true,
-  },
-  scoreIndex: {
-    type: Number,
-    required: true,
-  },
+const emit = defineEmits<{ (e: 'close'): void }>()
+
+const store = useStore()
+
+const players = computed(() => store.state.players)
+const scoreIndex = computed(() => store.state.editingScoreIndex)
+
+const model = reactive<{ score: number[] }>({
+  score: [...(store.state.scores[scoreIndex.value] ?? fill<number>(store.state.players.length))],
 })
-
-const emit = defineEmits<{
-  (e: 'save', payload: { score: number[] }): void
-  (e: 'close'): void
-}>()
-
-const model = reactive<{ score: number[] }>({ score: [...props.score] })
 const diff = computed(() => sum(model.score))
 
 const onBlur = (i: number) => !Number.isInteger(model.score[i]) && (model.score[i] = 0)
 const onAutoComplete = (i: number) => model.score[i] -= diff.value
-const onClear = () => model.score = fill<number>(props.players.length)
-const onSave = () => emit('save', { score: [...model.score] })
+const onClear = () => model.score = fill<number>(players.value.length)
+const onSave = () => {
+  store.commit('saveEditScore', { index: scoreIndex.value, score: [...model.score] })
+  emit('close')
+}
 const onClose = () => emit('close')
 </script>
