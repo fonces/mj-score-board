@@ -52,12 +52,16 @@
         <ResultModal v-if="modal.result" @close="modal.result = false" />
       </Animate>
     </template>
+    <Animate :name="ANIMATION.SLIDE_UP">
+      <InstallGuideModal v-if="modal.install" @close="modal.install = false" />
+    </Animate>
   </teleport>
 </template>
 
 <script setup lang="ts">
 import { reactive, computed, onBeforeMount } from 'vue'
 import { sum } from '@/utils/array'
+import { shouldShowInstallGuide } from '@/utils/pwa'
 import { toFormat, toSymbol } from '@/utils/string'
 import { asyncRender } from '@/utils/vue'
 import { useStore } from '@/store'
@@ -67,9 +71,10 @@ import Dialog from '@/components/molecules/Dialog.vue'
 import EditChipModal from '@/components/EditChipModal.vue'
 import EditPlayerModal from '@/components/EditPlayerModal.vue'
 import EditScoreModal from '@/components/EditScoreModal.vue'
+import InstallGuideModal from '@/components/InstallGuideModal.vue'
 import ResultModal from '@/components/ResultModal.vue'
 
-type ModalKey = 'player' | 'score' | 'chip' | 'result'
+type ModalKey = 'player' | 'score' | 'chip' | 'result' | 'install'
 
 const store = useStore()
 
@@ -84,6 +89,7 @@ const modal = reactive<Record<ModalKey, boolean>>({
   score: false,
   chip: false,
   result: false,
+  install: false,
 })
 
 const openModal = (key: ModalKey) => (modal[key] = true)
@@ -105,6 +111,9 @@ onBeforeMount(async () => {
     })
   } finally {
     history.replaceState(null, '', process.env.NODE_ENV === 'production' ? '/mj-score-board/' : '/')
+  }
+  if (shouldShowInstallGuide()) {
+    modal.install = true
   }
 })
 </script>
