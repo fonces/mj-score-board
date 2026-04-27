@@ -11,7 +11,7 @@
     "core-js": "^3.8.3",
     "html2canvas": "^1.4.1",
     "register-service-worker": "^1.7.2",
-    "uuid": "^8.3.2",
+    "uuid": "^14.0.0",
     "vue": "^3.2.13",
     "vue-gtag": "^2.0.1",
     "vue-material-design-icons": "^5.0.0"
@@ -45,5 +45,15 @@
     "last 2 versions",
     "not dead",
     "not ie 11"
-  ]
+  ],
+  "overrides": {
+    "cross-spawn": "^7.0.5",
+    "postcss": "^8.4.31",
+    "serialize-javascript": "^7.0.5",
+    "ws": "^7.5.10",
+    "sockjs": {
+      "uuid": "^14.0.0"
+    },
+    "webpack-dev-server": "^5.2.3"
+  }
 }
