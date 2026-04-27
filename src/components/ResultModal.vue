@@ -51,9 +51,6 @@
 
 <script setup lang="ts">
 import { reactive, computed, ref } from 'vue'
-import { event } from 'vue-gtag'
-import { v4 as uuid } from 'uuid'
-import html2canvas from 'html2canvas'
 import DownloadIcon from 'vue-material-design-icons/Download.vue'
 import ShareIcon from 'vue-material-design-icons/Share.vue'
 import Button from '@/components/atoms/Button.vue'
@@ -95,9 +92,9 @@ const onBlurChipRate = () => {
   }
 }
 
-const onShare = () => {
+const onShare = async () => {
   const url = new URL(location.pathname, location.href)
-  url.searchParams.set('id', uuid())
+  url.searchParams.set('id', crypto.randomUUID())
   url.searchParams.set('datetime', String(new Date().getTime()))
   url.searchParams.set('editable', String(editable.value))
   url.searchParams.set('players', String(players.value))
@@ -118,6 +115,7 @@ const onShare = () => {
       url: url.toString(),
     })
   }
+  const { event } = await import('vue-gtag')
   event('share', { event_label: editable.value ? 'editable' : 'readonly' })
 }
 
@@ -126,6 +124,7 @@ const onDownload = async () => {
   if (!node) return
   try {
     node.classList.add('printing')
+    const { default: html2canvas } = await import('html2canvas')
     const canvas = await html2canvas(node)
     const link = document.createElement('a')
     link.download = `${model.fileName || new Date().toLocaleString()}.png`
@@ -135,6 +134,7 @@ const onDownload = async () => {
     alert('画像の保存に失敗しました。')
   } finally {
     node.classList.remove('printing')
+    const { event } = await import('vue-gtag')
     event('export-image')
   }
 }

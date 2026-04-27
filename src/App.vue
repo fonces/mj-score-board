@@ -3,14 +3,12 @@
 </template>
 
 <script setup lang="ts">
-import { pageview } from 'vue-gtag'
 import '@/assets/reset.css'
 import '@/assets/root.css'
 import { useFillViewHeight } from '@/utils/window'
 import ScoreTable from '@/components/ScoreTable.vue'
 
 useFillViewHeight()
-pageview({ page_path: '/index' })
 </script>
 
 <style>
