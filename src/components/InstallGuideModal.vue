@@ -11,11 +11,11 @@
             <img :src="step1" alt="ステップ1" class="step-image" />
           </li>
           <li>
-            <span>メニューから<strong>「ホーム画面に追加」</strong>を選択</span>
+            <span><strong>「もっと見る」</strong>をタップ</span>
             <img :src="step2" alt="ステップ2" class="step-image" />
           </li>
           <li>
-            <span>右上の<strong>「追加」</strong>をタップ</span>
+            <span><strong>「ホーム画面に追加」</strong>を選択</span>
             <img :src="step3" alt="ステップ3" class="step-image" />
           </li>
         </ol>
