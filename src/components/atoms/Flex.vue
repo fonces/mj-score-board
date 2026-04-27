@@ -12,29 +12,25 @@
   </div>
 </template>
 
-<script lang="ts">
-import { CSSProperties, defineComponent, PropType } from 'vue'
+<script setup lang="ts">
+import { CSSProperties, PropType } from 'vue'
 
-export default defineComponent({
-  // eslint-disable-next-line vue/multi-word-component-names
-  name: 'Flex',
-  props: {
-    align: {
-      type: String as PropType<CSSProperties['alignItems']>,
-      default: 'center',
-    },
-    direction: {
-      type: String as PropType<CSSProperties['flexDirection']>,
-      default: 'row',
-    },
-    gap: {
-      type: String as PropType<CSSProperties['gap']>,
-      default: '',
-    },
-    justify: {
-      type: String as PropType<CSSProperties['justifyContent']>,
-      default: 'space-between',
-    },
+defineProps({
+  align: {
+    type: String as PropType<CSSProperties['alignItems']>,
+    default: 'center',
+  },
+  direction: {
+    type: String as PropType<CSSProperties['flexDirection']>,
+    default: 'row',
+  },
+  gap: {
+    type: String as PropType<CSSProperties['gap']>,
+    default: '',
+  },
+  justify: {
+    type: String as PropType<CSSProperties['justifyContent']>,
+    default: 'space-between',
   },
 })
 </script>

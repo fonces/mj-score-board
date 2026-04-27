@@ -19,10 +19,3 @@ export const asyncRender = <T = unknown>(
       return status
     })
 }
-
-export const asyncRenderProps = {
-  resolve: {
-    type: Function,
-    required: true,
-  },
-} as const

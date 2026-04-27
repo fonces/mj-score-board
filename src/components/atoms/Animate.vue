@@ -5,8 +5,6 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType } from 'vue'
-
 export const ANIMATION = {
   SLIDE_UP: 'slide-up',
   SLIDE_RIGHT: 'slide-right',
@@ -15,16 +13,16 @@ export const ANIMATION = {
 } as const
 
 export type AnimationName = typeof ANIMATION[keyof typeof ANIMATION]
+</script>
 
-export default defineComponent({
-  // eslint-disable-next-line vue/multi-word-component-names
-  name: 'Animate',
-  props: {
-    name: {
-      type: String as PropType<AnimationName>,
-      required: true,
-      validator: (v: string) => (Object.values(ANIMATION) as string[]).includes(v),
-    },
+<script setup lang="ts">
+import { PropType } from 'vue'
+
+defineProps({
+  name: {
+    type: String as PropType<AnimationName>,
+    required: true,
+    validator: (v: string) => (Object.values(ANIMATION) as string[]).includes(v),
   },
 })
 </script>

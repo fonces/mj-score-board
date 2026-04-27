@@ -17,23 +17,19 @@
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue'
+<script setup lang="ts">
 import CloseIcon from 'vue-material-design-icons/Close.vue'
 import Button from '@/components/atoms/Button.vue'
 
-export default defineComponent({
-  name: 'ModalBase',
-  components: {
-    CloseIcon,
-    Button,
-  },
-  props: {
-    title: {
-      type: String,
-    },
+defineProps({
+  title: {
+    type: String,
   },
 })
+
+defineEmits<{
+  (e: 'close'): void
+}>()
 </script>
 
 <style scoped>

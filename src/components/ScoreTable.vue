@@ -82,8 +82,8 @@
   </teleport>
 </template>
 
-<script lang="ts">
-import { defineComponent, reactive, computed, ref, watch, onBeforeMount } from 'vue'
+<script setup lang="ts">
+import { reactive, computed, ref, watch, onBeforeMount } from 'vue'
 import { fill, split, sum } from '@/utils/array'
 import { toFormat, toSymbol } from '@/utils/string'
 import { asyncRender } from '@/utils/vue'
@@ -117,158 +117,140 @@ const createDefault = (): Model => ({
   chipRate: 5000,
 })
 
-export default defineComponent({
-  name: 'ScoreTable',
-  components: {
-    Animate,
-    Clamp,
-    EditChipModal,
-    EditScoreModal,
-    EditPlayerModal,
-    ResultModal,
-  },
-  setup() {
-    const defaults = createDefault()
+const defaults = createDefault()
 
-    const model = reactive<Model>({
-      players: defaults.players,
-      scores: defaults.scores,
-      chips: defaults.chips,
-      chipRate: defaults.chipRate,
-    })
-    const modal = reactive<ModalState>({
-      player: false,
-      score: false,
-      chip: false,
-      result: false,
-      scoreIndex: 0,
-    })
-    const isEditableRef = ref(true)
-
-    onBeforeMount(() => {
-      const setState = (item: Model) => {
-        // numberize
-        item.scores = item.scores.map(score => score.map(s => +s))
-        item.chips = item.chips.map(chip => +chip)
-        ;(['players', 'scores', 'chips'] as const).forEach(key => {
-          (model as Model)[key] = item[key] as never
-        })
-      }
-
-      try {
-        const params = (new URL(document.location.href)).searchParams
-        if (params.get('id')) {
-          isEditableRef.value = !!JSON.parse(params.get('editable') || 'false')
-          const item = [...params].reduce<Record<string, string>>((acc, [key, value]) => ({ ...acc, [key]: value }), {})
-          const scores = item.scores.split(',')
-          const players = item.players.split(',')
-
-          if ((scores.length !== players.length)) throw new Error()
-
-          const parsed: Model = {
-            players,
-            scores: split(scores.map(s => +s), players.length),
-            chips: item.chips.split(',').map(c => +c),
-            chipRate: model.chipRate,
-          }
-          setState(parsed)
-        } else {
-          const itemString = localStorage.getItem('model')
-          if (itemString) {
-            const item = JSON.parse(itemString) as Model
-            setState(item)
-          }
-        }
-      } catch (e) {
-        asyncRender(Dialog, {
-          props: {
-            type: 'error',
-            message: 'データの読み込みに失敗しました。',
-          },
-          target: '#dialog',
-        })
-      } finally {
-        history.replaceState(null, '', process.env.NODE_ENV === 'production' ? '/mj-score-board/' : '/')
-      }
-    })
-
-    watch(
-      () => model,
-      () => {
-        if (!isEditableRef.value) return
-        localStorage.setItem('model', JSON.stringify({
-          ...model,
-          scores: [...model.scores],
-          chips: [...model.chips],
-        }))
-      },
-      { deep: true },
-    )
-
-    watch(
-      () => model.scores[model.scores.length - 1],
-      score => {
-        if (score.some(s => s !== 0))
-          model.scores = [...model.scores, fill<number>(model.players.length)]
-      }
-    )
-
-    return {
-      ANIMATION,
-      sum,
-      toFormat,
-      toSymbol,
-      model,
-      modal,
-      isEditable: isEditableRef,
-      summaries: computed(() => (
-        model.scores.reduce(
-          (acc, score) => score.map((s, j) => acc[j] += s),
-          fill<number>(model.players.length),
-        ).map((s, i) => s + (model.chips[i] * (model.chipRate / 1000)))
-      )),
-      onSaveEditPlayer: ({ players, deleted }: { players: string[]; deleted: number[] }) => {
-        model.players = players.filter((_, i) => !deleted.includes(i))
-        model.scores = model.scores.map(score => score.filter((_, j) => !deleted.includes(j)))
-        model.chips = model.chips.filter((_, j) => !deleted.includes(j))
-
-        const diff = model.players.length - model.scores[0].length
-        if (0 < diff) {
-          model.scores = model.scores.map(score => [...score, ...fill<number>(diff)])
-          model.chips = [...model.chips, ...fill<number>(diff)]
-        }
-
-        modal.player = false
-      },
-      onSaveEditScore: ({ score }: { score: number[] }) => {
-        model.scores[modal.scoreIndex] = score
-        modal.score = false
-      },
-      onSaveEditChip: ({ chips, chipRate }: { chips: number[]; chipRate: number }) => {
-        model.chips = chips
-        model.chipRate = chipRate
-        modal.chip = false
-      },
-      onReset: async () => {
-        if (await asyncRender<boolean>(Dialog, {
-          props: {
-            type: 'warning',
-            message: '戦績をクリアします。\nよろしいですか？',
-            cancellable: true,
-          },
-          target: '#dialog',
-        })) {
-          const { players, scores, chips, chipRate } = createDefault()
-          model.players = players
-          model.scores = scores
-          model.chips = chips
-          model.chipRate = chipRate
-          modal.result = false
-        }
-      },
-    }
-  },
+const model = reactive<Model>({
+  players: defaults.players,
+  scores: defaults.scores,
+  chips: defaults.chips,
+  chipRate: defaults.chipRate,
 })
+const modal = reactive<ModalState>({
+  player: false,
+  score: false,
+  chip: false,
+  result: false,
+  scoreIndex: 0,
+})
+const isEditable = ref(true)
+
+onBeforeMount(() => {
+  const setState = (item: Model) => {
+    // numberize
+    item.scores = item.scores.map(score => score.map(s => +s))
+    item.chips = item.chips.map(chip => +chip)
+    ;(['players', 'scores', 'chips'] as const).forEach(key => {
+      (model as Model)[key] = item[key] as never
+    })
+  }
+
+  try {
+    const params = (new URL(document.location.href)).searchParams
+    if (params.get('id')) {
+      isEditable.value = !!JSON.parse(params.get('editable') || 'false')
+      const item = [...params].reduce<Record<string, string>>((acc, [key, value]) => ({ ...acc, [key]: value }), {})
+      const scores = item.scores.split(',')
+      const players = item.players.split(',')
+
+      if ((scores.length !== players.length)) throw new Error()
+
+      const parsed: Model = {
+        players,
+        scores: split(scores.map(s => +s), players.length),
+        chips: item.chips.split(',').map(c => +c),
+        chipRate: model.chipRate,
+      }
+      setState(parsed)
+    } else {
+      const itemString = localStorage.getItem('model')
+      if (itemString) {
+        const item = JSON.parse(itemString) as Model
+        setState(item)
+      }
+    }
+  } catch (e) {
+    asyncRender(Dialog, {
+      props: {
+        type: 'error',
+        message: 'データの読み込みに失敗しました。',
+      },
+      target: '#dialog',
+    })
+  } finally {
+    history.replaceState(null, '', process.env.NODE_ENV === 'production' ? '/mj-score-board/' : '/')
+  }
+})
+
+watch(
+  () => model,
+  () => {
+    if (!isEditable.value) return
+    localStorage.setItem('model', JSON.stringify({
+      ...model,
+      scores: [...model.scores],
+      chips: [...model.chips],
+    }))
+  },
+  { deep: true },
+)
+
+watch(
+  () => model.scores[model.scores.length - 1],
+  score => {
+    if (score.some(s => s !== 0))
+      model.scores = [...model.scores, fill<number>(model.players.length)]
+  }
+)
+
+const summaries = computed(() => (
+  model.scores.reduce(
+    (acc, score) => score.map((s, j) => acc[j] += s),
+    fill<number>(model.players.length),
+  ).map((s, i) => s + (model.chips[i] * (model.chipRate / 1000)))
+))
+
+const onSaveEditPlayer = ({ players, deleted }: { players: string[]; deleted: number[] }) => {
+  model.players = players.filter((_, i) => !deleted.includes(i))
+  model.scores = model.scores.map(score => score.filter((_, j) => !deleted.includes(j)))
+  model.chips = model.chips.filter((_, j) => !deleted.includes(j))
+
+  const diff = model.players.length - model.scores[0].length
+  if (0 < diff) {
+    model.scores = model.scores.map(score => [...score, ...fill<number>(diff)])
+    model.chips = [...model.chips, ...fill<number>(diff)]
+  }
+
+  modal.player = false
+}
+
+const onSaveEditScore = ({ score }: { score: number[] }) => {
+  model.scores[modal.scoreIndex] = score
+  modal.score = false
+}
+
+const onSaveEditChip = ({ chips, chipRate }: { chips: number[]; chipRate: number }) => {
+  model.chips = chips
+  model.chipRate = chipRate
+  modal.chip = false
+}
+
+const onReset = async () => {
+  if (await asyncRender<boolean>(Dialog, {
+    props: {
+      type: 'warning',
+      message: '戦績をクリアします。\nよろしいですか？',
+      cancellable: true,
+    },
+    target: '#dialog',
+  })) {
+    const { players, scores, chips, chipRate } = createDefault()
+    model.players = players
+    model.scores = scores
+    model.chips = chips
+    model.chipRate = chipRate
+    modal.result = false
+  }
+}
 </script>
 
 <style scoped>

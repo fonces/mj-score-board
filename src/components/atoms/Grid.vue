@@ -4,21 +4,17 @@
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue'
+<script setup lang="ts">
+import { CSSProperties, PropType } from 'vue'
 
-export default defineComponent({
-  // eslint-disable-next-line vue/multi-word-component-names
-  name: 'Grid',
-  props: {
-    gap: {
-      type: String,
-      default: '16px',
-    },
-    direction: {
-      type: String,
-      default: 'row',
-    },
+defineProps({
+  gap: {
+    type: String as PropType<CSSProperties['gap']>,
+    default: '16px',
+  },
+  direction: {
+    type: String as PropType<CSSProperties['gridAutoFlow']>,
+    default: 'row',
   },
 })
 </script>

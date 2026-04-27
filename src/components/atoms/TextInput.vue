@@ -11,34 +11,34 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType } from 'vue'
+export default { inheritAttrs: false }
+</script>
+
+<script setup lang="ts">
+import { PropType } from 'vue'
 
 type Align = 'left' | 'center' | 'right'
 
-export default defineComponent({
-  name: 'TextInput',
-  inheritAttrs: false,
-  emits: ['update:modelValue'],
-  props: {
-    modelValue: {
-      type: [String, Number] as PropType<string | number>,
-      required: true,
-    },
-    align: {
-      type: String as PropType<Align>,
-      default: 'left',
-      validator: (v: string) => ['left', 'center', 'right'].includes(v),
-    },
+const props = defineProps({
+  modelValue: {
+    type: [String, Number] as PropType<string | number>,
+    required: true,
   },
-  setup(props) {
-    return {
-      onFocus: (e: FocusEvent) => {
-        const target = e.target as HTMLInputElement
-        target.setSelectionRange(0, String(props.modelValue).length)
-      },
-    }
+  align: {
+    type: String as PropType<Align>,
+    default: 'left',
+    validator: (v: string) => ['left', 'center', 'right'].includes(v),
   },
 })
+
+defineEmits<{
+  (e: 'update:modelValue', value: string): void
+}>()
+
+const onFocus = (e: FocusEvent) => {
+  const target = e.target as HTMLInputElement
+  target.setSelectionRange(0, String(props.modelValue).length)
+}
 </script>
 
 <style scoped>

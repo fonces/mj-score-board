@@ -49,8 +49,8 @@
   </ModalBase>
 </template>
 
-<script lang="ts">
-import { defineComponent, reactive, computed, ref, PropType } from 'vue'
+<script setup lang="ts">
+import { reactive, computed, ref, PropType } from 'vue'
 import { event } from 'vue-gtag'
 import { v4 as uuid } from 'uuid'
 import html2canvas from 'html2canvas'
@@ -65,101 +65,90 @@ import TextInput from '@/components/atoms/TextInput.vue'
 import FormGroup from '@/components/molecules/FormGroup.vue'
 import ModalBase from '@/components/molecules/ModalBase.vue'
 
-export default defineComponent({
-  name: 'ResultModal',
-  components: {
-    DownloadIcon,
-    ShareIcon,
-    Button,
-    FormField,
-    Grid,
-    Label,
-    Switch,
-    TextInput,
-    FormGroup,
-    ModalBase,
+const props = defineProps({
+  players: {
+    type: Array as PropType<string[]>,
+    required: true,
   },
-  props: {
-    players: {
-      type: Array as PropType<string[]>,
-      required: true,
-    },
-    scores: {
-      type: Array as PropType<number[][]>,
-      required: true,
-    },
-    chips: {
-      type: Array as PropType<number[]>,
-      required: true,
-    },
-    chipRate: {
-      type: Number,
-      required: true,
-    },
+  scores: {
+    type: Array as PropType<number[][]>,
+    required: true,
   },
-  emits: ['reset', 'close'],
-  setup(props, { emit }) {
-    const model = reactive({ rate: 50, chipRate: props.chipRate, fileName: '' })
-    const editableRef = ref(false)
-
-    return {
-      model,
-      editable: editableRef,
-      results: computed(() => props.players.map((player, i) => ({
-        player,
-        price: props.scores.reduce((acc, score) => (
-          acc + score[i]
-        ), props.chips[i] * (model.chipRate / 1000)) * model.rate,
-      }))),
-      onBlur: () => !Number.isInteger(model.rate) && (model.rate = 50),
-      onBlurChipRate: () => (!Number.isInteger(model.chipRate) || model.chipRate % 1000 !== 0) && (model.chipRate = props.chipRate),
-      onShare: () => {
-        const url = new URL(location.pathname, location.href)
-        url.searchParams.set('id', uuid())
-        url.searchParams.set('datetime', String(new Date().getTime()))
-        url.searchParams.set('editable', String(editableRef.value))
-        url.searchParams.set('players', String(props.players))
-        url.searchParams.set('scores', String(props.scores))
-        url.searchParams.set('chips', String(props.chips))
-
-        if (typeof navigator.share === 'undefined') {
-          if (navigator.clipboard) {
-            navigator.clipboard.writeText(url.toString())
-            alert('コピーしました。')
-          } else {
-            alert('お使いのブラウザにはクリップボード機能がありません。')
-          }
-        } else {
-          navigator.share({
-            title: '麻雀スコア',
-            text: '',
-            url: url.toString(),
-          })
-        }
-        event('share', { event_label: editableRef.value ? 'editable' : 'readonly' })
-      },
-      onDownload: async () => {
-        const node = document.querySelector('#app') as HTMLElement | null
-        if (!node) return
-        try {
-          node.classList.add('printing')
-          const canvas = await html2canvas(node)
-          const link = document.createElement('a')
-          link.download = `${model.fileName || new Date().toLocaleString()}.png`
-          link.href = canvas.toDataURL('image/png')
-          link.click()
-        } catch (e) {
-          alert('画像の保存に失敗しました。')
-        } finally {
-          node.classList.remove('printing')
-          event('export-image')
-        }
-      },
-      onReset: () => emit('reset'),
-      onClose: () => emit('close'),
-    }
+  chips: {
+    type: Array as PropType<number[]>,
+    required: true,
+  },
+  chipRate: {
+    type: Number,
+    required: true,
   },
 })
+
+const emit = defineEmits<{
+  (e: 'reset'): void
+  (e: 'close'): void
+}>()
+
+const model = reactive({ rate: 50, chipRate: props.chipRate, fileName: '' })
+const editable = ref(false)
+
+const results = computed(() => props.players.map((player, i) => ({
+  player,
+  price: props.scores.reduce((acc, score) => (
+    acc + score[i]
+  ), props.chips[i] * (model.chipRate / 1000)) * model.rate,
+})))
+
+const onBlur = () => !Number.isInteger(model.rate) && (model.rate = 50)
+const onBlurChipRate = () =>
+  (!Number.isInteger(model.chipRate) || model.chipRate % 1000 !== 0) && (model.chipRate = props.chipRate)
+
+const onShare = () => {
+  const url = new URL(location.pathname, location.href)
+  url.searchParams.set('id', uuid())
+  url.searchParams.set('datetime', String(new Date().getTime()))
+  url.searchParams.set('editable', String(editable.value))
+  url.searchParams.set('players', String(props.players))
+  url.searchParams.set('scores', String(props.scores))
+  url.searchParams.set('chips', String(props.chips))
+
+  if (typeof navigator.share === 'undefined') {
+    if (navigator.clipboard) {
+      navigator.clipboard.writeText(url.toString())
+      alert('コピーしました。')
+    } else {
+      alert('お使いのブラウザにはクリップボード機能がありません。')
+    }
+  } else {
+    navigator.share({
+      title: '麻雀スコア',
+      text: '',
+      url: url.toString(),
+    })
+  }
+  event('share', { event_label: editable.value ? 'editable' : 'readonly' })
+}
+
+const onDownload = async () => {
+  const node = document.querySelector('#app') as HTMLElement | null
+  if (!node) return
+  try {
+    node.classList.add('printing')
+    const canvas = await html2canvas(node)
+    const link = document.createElement('a')
+    link.download = `${model.fileName || new Date().toLocaleString()}.png`
+    link.href = canvas.toDataURL('image/png')
+    link.click()
+  } catch (e) {
+    alert('画像の保存に失敗しました。')
+  } finally {
+    node.classList.remove('printing')
+    event('export-image')
+  }
+}
+
+const onReset = () => emit('reset')
+const onClose = () => emit('close')
 </script>
 
 <style scoped>

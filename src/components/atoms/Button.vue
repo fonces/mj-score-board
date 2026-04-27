@@ -5,22 +5,19 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
+export default { inheritAttrs: false }
+</script>
 
-export default defineComponent({
-  // eslint-disable-next-line vue/multi-word-component-names
-  name: 'Button',
-  inheritAttrs: false,
-  props: {
-    primary: {
-      type: Boolean,
-    },
-    small: {
-      type: Boolean,
-    },
-    flat: {
-      type: Boolean,
-    },
+<script setup lang="ts">
+defineProps({
+  primary: {
+    type: Boolean,
+  },
+  small: {
+    type: Boolean,
+  },
+  flat: {
+    type: Boolean,
   },
 })
 </script>

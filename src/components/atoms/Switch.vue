@@ -14,24 +14,24 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
+export default { inheritAttrs: false }
+</script>
 
-export default defineComponent({
-  // eslint-disable-next-line vue/multi-word-component-names
-  name: 'Switch',
-  inheritAttrs: false,
-  emits: ['update:modelValue'],
-  props: {
-    modelValue: {
-      type: Boolean,
-      required: true,
-    },
-    name: {
-      type: String,
-      required: true,
-    },
+<script setup lang="ts">
+defineProps({
+  modelValue: {
+    type: Boolean,
+    required: true,
+  },
+  name: {
+    type: String,
+    required: true,
   },
 })
+
+defineEmits<{
+  (e: 'update:modelValue', value: boolean): void
+}>()
 </script>
 
 <style scoped>

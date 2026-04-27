@@ -28,13 +28,13 @@
     </Grid>
     <template #footer>
       <Button @click="onClose">キャンセル</Button>
-      <Button primary :disabled="diff" @click="onSave">保存</Button>
+      <Button primary :disabled="!!diff" @click="onSave">保存</Button>
     </template>
   </ModalBase>
 </template>
 
-<script lang="ts">
-import { defineComponent, reactive, computed, PropType } from 'vue'
+<script setup lang="ts">
+import { reactive, computed, PropType } from 'vue'
 import RestoreIcon from 'vue-material-design-icons/Restore.vue'
 import Button from '@/components/atoms/Button.vue'
 import FormField from '@/components/atoms/FormField.vue'
@@ -46,54 +46,40 @@ import FormGroup from '@/components/molecules/FormGroup.vue'
 import ModalBase from '@/components/molecules/ModalBase.vue'
 import { fill, sum } from '@/utils/array'
 
-export default defineComponent({
-  name: 'EditChipModal',
-  components: {
-    RestoreIcon,
-    Button,
-    FormField,
-    Flex,
-    Grid,
-    Label,
-    TextInput,
-    FormGroup,
-    ModalBase,
+const props = defineProps({
+  players: {
+    type: Array as PropType<string[]>,
+    required: true,
   },
-  props: {
-    players: {
-      type: Array as PropType<string[]>,
-      required: true,
-    },
-    chips: {
-      type: Array as PropType<number[]>,
-      required: true,
-    },
-    chipRate: {
-      type: Number,
-      required: true,
-    },
+  chips: {
+    type: Array as PropType<number[]>,
+    required: true,
   },
-  emits: ['save', 'close'],
-  setup(props, { emit }) {
-    const model = reactive<{ chips: number[]; chipRate: number }>({
-      chips: [...props.chips],
-      chipRate: props.chipRate,
-    })
-    const diffRef = computed(() => sum(model.chips))
-
-    return {
-      model,
-      diff: diffRef,
-      onBlur: (i: number) => !Number.isInteger(model.chips[i]) && (model.chips[i] = 0),
-      onBlurChipRate: () => (!Number.isInteger(model.chipRate) || model.chipRate % 1000 !== 0) && (model.chipRate = props.chipRate),
-      onAutoComplete: (i: number) => model.chips[i] -= diffRef.value,
-      onClear: () => {
-        model.chips = fill<number>(props.players.length)
-        model.chipRate = 5000
-      },
-      onSave: () => emit('save', { ...model, chips: [...model.chips] }),
-      onClose: () => emit('close'),
-    }
+  chipRate: {
+    type: Number,
+    required: true,
   },
 })
+
+const emit = defineEmits<{
+  (e: 'save', payload: { chips: number[]; chipRate: number }): void
+  (e: 'close'): void
+}>()
+
+const model = reactive<{ chips: number[]; chipRate: number }>({
+  chips: [...props.chips],
+  chipRate: props.chipRate,
+})
+const diff = computed(() => sum(model.chips))
+
+const onBlur = (i: number) => !Number.isInteger(model.chips[i]) && (model.chips[i] = 0)
+const onBlurChipRate = () =>
+  (!Number.isInteger(model.chipRate) || model.chipRate % 1000 !== 0) && (model.chipRate = props.chipRate)
+const onAutoComplete = (i: number) => model.chips[i] -= diff.value
+const onClear = () => {
+  model.chips = fill<number>(props.players.length)
+  model.chipRate = 5000
+}
+const onSave = () => emit('save', { ...model, chips: [...model.chips] })
+const onClose = () => emit('close')
 </script>
