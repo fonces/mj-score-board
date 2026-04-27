@@ -41,6 +41,13 @@ module.exports = defineConfig({
       maskIcon: null,
       msTileImage: null,
     },
+    workboxOptions: {
+      // 新しい Service Worker を待機させずに即時アクティブ化し、
+      // 既存クライアントの制御も奪うことで、デプロイ後の更新が
+      // 次回起動時に確実に反映されるようにする
+      skipWaiting: true,
+      clientsClaim: true,
+    },
   },
   transpileDependencies: true,
 })
