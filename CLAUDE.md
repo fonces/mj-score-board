@@ -18,7 +18,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 Vue 3 製の SPA／PWA（Composition API の `setup()` + TypeScript）で、麻雀のスコアを記録する。ルートは 1 つだけで、`App.vue` が `ScoreTable.vue` をマウントし、ゲーム状態はすべて `ScoreTable.vue` が保持する。
 
-すべてのコンポーネントは `defineComponent({ ... })` で定義する。型付けは `tsconfig.json` の `strict: false` で運用しており、props は `as PropType<T>` で型を付ける。`.vue` の SFC 用 shim は `src/shims-vue.d.ts`。エントリは `src/main.ts`（`vue.config.js` の `entry` で指定）。
+すべてのコンポーネントは `defineComponent({ ... })` で定義する。`tsconfig.json` は `strict: true`（`strictNullChecks` 含む全 strict フラグ有効）で運用し、props は `as PropType<T>` で型を付ける。`.vue` の SFC 用 shim は `src/shims-vue.d.ts`。エントリは `src/main.ts`（`vue.config.js` の `entry` で指定）。
 
 ### 状態管理と永続化
 `ScoreTable.vue` が単一の状態源（single source of truth）。reactive な `model`（`players`, `scores`, `chips`, `chipRate`）の挙動は以下の通り：
