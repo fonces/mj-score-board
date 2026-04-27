@@ -40,11 +40,19 @@
             </Button>
           </FormField>
         </FormGroup>
+        <FormGroup title="履歴">
+          <FormField>
+            <Label>{{ historyCount }}件</Label>
+            <Button small @click="onOpenHistory">
+              <HistoryIcon />
+            </Button>
+          </FormField>
+        </FormGroup>
       </Grid>
     </Grid>
     <template #footer>
       <Button @click="onClose">キャンセル</Button>
-      <Button primary @click="onReset">戦績クリア</Button>
+      <Button primary @click="onStartNewGame">新しいゲーム</Button>
     </template>
   </ModalBase>
 </template>
@@ -52,6 +60,7 @@
 <script setup lang="ts">
 import { reactive, computed, ref } from 'vue'
 import DownloadIcon from 'vue-material-design-icons/Download.vue'
+import HistoryIcon from 'vue-material-design-icons/History.vue'
 import ShareIcon from 'vue-material-design-icons/Share.vue'
 import Button from '@/components/atoms/Button.vue'
 import FormField from '@/components/atoms/FormField.vue'
@@ -65,13 +74,17 @@ import Dialog from '@/components/molecules/Dialog.vue'
 import { asyncRender } from '@/utils/vue'
 import { useStore } from '@/store'
 
-const emit = defineEmits<{ (e: 'close'): void }>()
+const emit = defineEmits<{
+  (e: 'close'): void
+  (e: 'open-history'): void
+}>()
 
 const store = useStore()
 
 const players = computed(() => store.state.players)
 const scores = computed(() => store.state.scores)
 const chips = computed(() => store.state.chips)
+const historyCount = computed(() => store.state.history.length)
 
 const model = reactive({ rate: 50, chipRate: store.state.chipRate, fileName: '' })
 const editable = ref(false)
@@ -139,19 +152,20 @@ const onDownload = async () => {
   }
 }
 
-const onReset = async () => {
+const onStartNewGame = async () => {
   if (await asyncRender<boolean>(Dialog, {
     props: {
       type: 'warning',
-      message: '戦績をクリアします。\nよろしいですか？',
+      message: '現在の戦績を履歴に保存し、\n新しいゲームを開始します。\nよろしいですか？',
       cancellable: true,
     },
     target: '#dialog',
   })) {
-    store.commit('reset')
+    store.dispatch('startNewGame')
     emit('close')
   }
 }
+const onOpenHistory = () => emit('open-history')
 const onClose = () => emit('close')
 </script>
 

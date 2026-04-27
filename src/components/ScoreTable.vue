@@ -49,7 +49,14 @@
         <EditChipModal v-if="modal.chip" @close="modal.chip = false" />
       </Animate>
       <Animate :name="ANIMATION.SLIDE_UP">
-        <ResultModal v-if="modal.result" @close="modal.result = false" />
+        <ResultModal
+          v-if="modal.result"
+          @close="modal.result = false"
+          @open-history="onOpenHistory"
+        />
+      </Animate>
+      <Animate :name="ANIMATION.SLIDE_LEFT">
+        <HistoryModal v-if="modal.history" @close="modal.history = false" />
       </Animate>
     </template>
     <Animate :name="ANIMATION.SLIDE_UP">
@@ -71,10 +78,11 @@ import Dialog from '@/components/molecules/Dialog.vue'
 import EditChipModal from '@/components/EditChipModal.vue'
 import EditPlayerModal from '@/components/EditPlayerModal.vue'
 import EditScoreModal from '@/components/EditScoreModal.vue'
+import HistoryModal from '@/components/HistoryModal.vue'
 import InstallGuideModal from '@/components/InstallGuideModal.vue'
 import ResultModal from '@/components/ResultModal.vue'
 
-type ModalKey = 'player' | 'score' | 'chip' | 'result' | 'install'
+type ModalKey = 'player' | 'score' | 'chip' | 'result' | 'history' | 'install'
 
 const store = useStore()
 
@@ -89,6 +97,7 @@ const modal = reactive<Record<ModalKey, boolean>>({
   score: false,
   chip: false,
   result: false,
+  history: false,
   install: false,
 })
 
@@ -96,6 +105,10 @@ const openModal = (key: ModalKey) => (modal[key] = true)
 const openScoreModal = (index: number) => {
   store.commit('setEditingScoreIndex', index)
   modal.score = true
+}
+const onOpenHistory = () => {
+  modal.result = false
+  modal.history = true
 }
 
 onBeforeMount(async () => {
