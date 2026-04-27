@@ -4,7 +4,7 @@ const BASE_PATH = process.env.NODE_ENV === 'production' ? '/mj-score-board/' : '
 module.exports = defineConfig({
   pages: {
     index: {
-      entry: 'src/main.js',
+      entry: 'src/main.ts',
       title: '麻雀スコアボード',
     }
   },

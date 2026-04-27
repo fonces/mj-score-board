@@ -17,12 +17,13 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
+import { defineComponent } from 'vue'
 import CloseIcon from 'vue-material-design-icons/Close.vue'
 import Button from '@/components/atoms/Button.vue'
 
-export default {
-  name: 'ModalBase',  
+export default defineComponent({
+  name: 'ModalBase',
   components: {
     CloseIcon,
     Button,
@@ -32,7 +33,7 @@ export default {
       type: String,
     },
   },
-}
+})
 </script>
 
 <style scoped>

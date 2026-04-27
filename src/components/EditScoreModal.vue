@@ -25,8 +25,8 @@
   </ModalBase>
 </template>
 
-<script>
-import { reactive, computed } from 'vue'
+<script lang="ts">
+import { defineComponent, reactive, computed, PropType } from 'vue'
 import RestoreIcon from 'vue-material-design-icons/Restore.vue'
 import Button from '@/components/atoms/Button.vue'
 import FormField from '@/components/atoms/FormField.vue'
@@ -38,7 +38,7 @@ import FormGroup from '@/components/molecules/FormGroup.vue'
 import ModalBase from '@/components/molecules/ModalBase.vue'
 import { fill, sum } from '@/utils/array'
 
-export default {
+export default defineComponent({
   name: 'EditScoreModal',
   components: {
     RestoreIcon,
@@ -53,11 +53,11 @@ export default {
   },
   props: {
     players: {
-      type: Array,
+      type: Array as PropType<string[]>,
       required: true,
     },
     score: {
-      type: Array,
+      type: Array as PropType<number[]>,
       required: true,
     },
     scoreIndex: {
@@ -65,19 +65,20 @@ export default {
       required: true,
     },
   },
+  emits: ['save', 'close'],
   setup(props, { emit }) {
-    const model = reactive({ score: [...props.score] })
+    const model = reactive<{ score: number[] }>({ score: [...props.score] })
     const diffRef = computed(() => sum(model.score))
 
     return {
       model,
       diff: diffRef,
-      onBlur: i => !Number.isInteger(model.score[i]) && (model.score[i] = 0),
-      onAutoComplete: i => model.score[i] -= diffRef.value,
-      onClear: () => model.score = fill(props.players.length),
+      onBlur: (i: number) => !Number.isInteger(model.score[i]) && (model.score[i] = 0),
+      onAutoComplete: (i: number) => model.score[i] -= diffRef.value,
+      onClear: () => model.score = fill<number>(props.players.length),
       onSave: () => emit('save', { score: [...model.score] }),
       onClose: () => emit('close'),
     }
   },
-}
+})
 </script>

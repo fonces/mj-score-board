@@ -2,23 +2,24 @@
   <ScoreTable />
 </template>
 
-<script>
+<script lang="ts">
+import { defineComponent } from 'vue'
 import { pageview } from 'vue-gtag'
 import '@/assets/reset.css'
 import '@/assets/root.css'
 import { useFillViewHeight } from '@/utils/window'
 import ScoreTable from '@/components/ScoreTable.vue'
 
-export default {
+export default defineComponent({
   name: 'App',
   components: {
     ScoreTable,
   },
   setup() {
     useFillViewHeight()
-    pageview('/index')
+    pageview({ page_path: '/index' })
   },
-}
+})
 </script>
 
 <style>

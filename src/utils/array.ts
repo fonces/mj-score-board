@@ -1,30 +1,22 @@
 /**
  * valueを繰り返す配列を作成する
- * @param {Number} len 
- * @param {any} value 
- * @returns 
  */
-export const fill = (len, value = 0) => (
+export const fill = <T = number>(len: number, value: T = 0 as unknown as T): T[] => (
   Array(len).fill(value)
 )
 
 /**
  * listをdivide毎に分割する
- * @param {Array} list 
- * @param {Number} divide 
- * @returns 
  */
-export const split = (list, divide) => (
+export const split = <T>(list: T[], divide: number): T[][] => (
   Array(list.length / divide)
-    .fill()
+    .fill(undefined)
     .map((_, i) => list.slice(i * divide, (i + 1) * divide))
 )
 
 /**
  * numbersの合計を算出する
- * @param {Array} numbers
- * @returns 
  */
- export const sum = numbers => (
+export const sum = (numbers: number[]): number => (
   numbers.reduce((acc, n) => acc += n, 0)
- )
+)

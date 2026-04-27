@@ -5,8 +5,10 @@
   </div>
 </template>
 
-<script>
-export default {
+<script lang="ts">
+import { defineComponent } from 'vue'
+
+export default defineComponent({
   // eslint-disable-next-line vue/multi-word-component-names
   name: 'FormGroup',
   props: {
@@ -15,7 +17,7 @@ export default {
       required: true,
     },
   },
-}
+})
 </script>
 
 <style scoped>

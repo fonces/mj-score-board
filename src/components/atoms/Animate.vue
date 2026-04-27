@@ -4,25 +4,29 @@
   </transition>
 </template>
 
-<script>
+<script lang="ts">
+import { defineComponent, PropType } from 'vue'
+
 export const ANIMATION = {
   SLIDE_UP: 'slide-up',
   SLIDE_RIGHT: 'slide-right',
   SLIDE_DOWN: 'slide-down',
   SLIDE_LEFT: 'slide-left',
-}
+} as const
 
-export default {
+export type AnimationName = typeof ANIMATION[keyof typeof ANIMATION]
+
+export default defineComponent({
   // eslint-disable-next-line vue/multi-word-component-names
   name: 'Animate',
   props: {
     name: {
-      type: String,
+      type: String as PropType<AnimationName>,
       required: true,
-      validator: v => Object.values(ANIMATION).includes(v),
+      validator: (v: string) => (Object.values(ANIMATION) as string[]).includes(v),
     },
   },
-}
+})
 </script>
 
 <style scoped>

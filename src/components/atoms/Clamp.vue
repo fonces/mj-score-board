@@ -4,8 +4,10 @@
   </span>
 </template>
 
-<script>
-export default {
+<script lang="ts">
+import { defineComponent } from 'vue'
+
+export default defineComponent({
   // eslint-disable-next-line vue/multi-word-component-names
   name: 'Clamp',
   props: {
@@ -14,7 +16,7 @@ export default {
       default: 1,
     },
   },
-}
+})
 </script>
 
 <style scoped>

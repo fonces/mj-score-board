@@ -4,8 +4,10 @@
   </label>
 </template>
 
-<script>
-export default {
+<script lang="ts">
+import { defineComponent } from 'vue'
+
+export default defineComponent({
   // eslint-disable-next-line vue/multi-word-component-names
   name: 'Label',
   props: {
@@ -22,7 +24,7 @@ export default {
       default: false,
     },
   },
-}
+})
 </script>
 
 <style>

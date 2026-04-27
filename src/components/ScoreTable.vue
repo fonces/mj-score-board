@@ -82,8 +82,8 @@
   </teleport>
 </template>
 
-<script>
-import { reactive, computed, ref, watch, onBeforeMount } from 'vue'
+<script lang="ts">
+import { defineComponent, reactive, computed, ref, watch, onBeforeMount } from 'vue'
 import { fill, split, sum } from '@/utils/array'
 import { toFormat, toSymbol } from '@/utils/string'
 import { asyncRender } from '@/utils/vue'
@@ -95,14 +95,29 @@ import EditPlayerModal from '@/components/EditPlayerModal.vue'
 import EditScoreModal from '@/components/EditScoreModal.vue'
 import ResultModal from '@/components/ResultModal.vue'
 
-const createDefault = () => ({
-  players: fill(4).map((_, i) => `プレイヤー${i + 1}`),
-  scores: [fill(4)],
-  chips: fill(4),
+type Model = {
+  players: string[]
+  scores: number[][]
+  chips: number[]
+  chipRate: number
+}
+
+type ModalState = {
+  player: boolean
+  score: boolean
+  chip: boolean
+  result: boolean
+  scoreIndex: number | null
+}
+
+const createDefault = (): Model => ({
+  players: fill<number>(4).map((_, i) => `プレイヤー${i + 1}`),
+  scores: [fill<number>(4)],
+  chips: fill<number>(4),
   chipRate: 5000,
 })
 
-export default {
+export default defineComponent({
   name: 'ScoreTable',
   components: {
     Animate,
@@ -115,13 +130,13 @@ export default {
   setup() {
     const defaults = createDefault()
 
-    const model = reactive({
+    const model = reactive<Model>({
       players: defaults.players,
       scores: defaults.scores,
       chips: defaults.chips,
       chipRate: defaults.chipRate,
     })
-    const modal = reactive({
+    const modal = reactive<ModalState>({
       player: false,
       score: false,
       chip: false,
@@ -131,45 +146,46 @@ export default {
     const isEditableRef = ref(true)
 
     onBeforeMount(() => {
-      const setState = item => {
+      const setState = (item: Model) => {
         // numberize
         item.scores = item.scores.map(score => score.map(s => +s))
         item.chips = item.chips.map(chip => +chip)
-        ;[
-          'players',
-          'scores',
-          'chips',
-        ].map(key => (model[key] = item[key]))
+        ;(['players', 'scores', 'chips'] as const).forEach(key => {
+          (model as Model)[key] = item[key] as never
+        })
       }
 
       try {
-        const params = (new URL(document.location)).searchParams
+        const params = (new URL(document.location.href)).searchParams
         if (params.get('id')) {
-          isEditableRef.value = !!JSON.parse(params.get('editable'))
-          const item = [...params].reduce((acc, [key, value]) => ({ ...acc, [key]: value }), {})
+          isEditableRef.value = !!JSON.parse(params.get('editable') || 'false')
+          const item = [...params].reduce<Record<string, string>>((acc, [key, value]) => ({ ...acc, [key]: value }), {})
           const scores = item.scores.split(',')
           const players = item.players.split(',')
 
           if ((scores.length !== players.length)) throw new Error()
 
-          item.players = item.players.split(',')
-          item.scores = split(scores, item.players.length)
-          item.chips = item.chips.split(',')
-          setState(item)
+          const parsed: Model = {
+            players,
+            scores: split(scores.map(s => +s), players.length),
+            chips: item.chips.split(',').map(c => +c),
+            chipRate: model.chipRate,
+          }
+          setState(parsed)
         } else {
           const itemString = localStorage.getItem('model')
           if (itemString) {
-            const item = JSON.parse(itemString)
+            const item = JSON.parse(itemString) as Model
             setState(item)
           }
         }
-      } catch(e) {
+      } catch (e) {
         asyncRender(Dialog, {
           props: {
             type: 'error',
             message: 'データの読み込みに失敗しました。',
           },
-          target: '#dialog'
+          target: '#dialog',
         })
       } finally {
         history.replaceState(null, '', process.env.NODE_ENV === 'production' ? '/mj-score-board/' : '/')
@@ -192,8 +208,8 @@ export default {
     watch(
       () => model.scores[model.scores.length - 1],
       score => {
-        if (score.some(s => s !== 0)) 
-          model.scores = [...model.scores, fill(model.players.length)]
+        if (score.some(s => s !== 0))
+          model.scores = [...model.scores, fill<number>(model.players.length)]
       }
     )
 
@@ -208,40 +224,42 @@ export default {
       summaries: computed(() => (
         model.scores.reduce(
           (acc, score) => score.map((s, j) => acc[j] += s),
-          fill(model.players.length),
+          fill<number>(model.players.length),
         ).map((s, i) => s + (model.chips[i] * (model.chipRate / 1000)))
       )),
-      onSaveEditPlayer: ({ players, deleted }) => {
+      onSaveEditPlayer: ({ players, deleted }: { players: string[]; deleted: number[] }) => {
         model.players = players.filter((_, i) => !deleted.includes(i))
         model.scores = model.scores.map(score => score.filter((_, j) => !deleted.includes(j)))
         model.chips = model.chips.filter((_, j) => !deleted.includes(j))
 
         const diff = model.players.length - model.scores[0].length
         if (0 < diff) {
-          model.scores = model.scores.map(score => [...score, ...fill(diff)])
-          model.chips = [...model.chips, ...fill(diff)]
+          model.scores = model.scores.map(score => [...score, ...fill<number>(diff)])
+          model.chips = [...model.chips, ...fill<number>(diff)]
         }
 
         modal.player = false
       },
-      onSaveEditScore: ({ score }) => {
-        model.scores[modal.scoreIndex] = score
+      onSaveEditScore: ({ score }: { score: number[] }) => {
+        if (modal.scoreIndex !== null) {
+          model.scores[modal.scoreIndex] = score
+        }
         modal.scoreIndex = null
         modal.score = false
       },
-      onSaveEditChip: ({ chips, chipRate }) => {
+      onSaveEditChip: ({ chips, chipRate }: { chips: number[]; chipRate: number }) => {
         model.chips = chips
         model.chipRate = chipRate
         modal.chip = false
       },
       onReset: async () => {
-        if (await asyncRender(Dialog, {
+        if (await asyncRender<boolean>(Dialog, {
           props: {
             type: 'warning',
             message: '戦績をクリアします。\nよろしいですか？',
             cancellable: true,
           },
-          target: '#dialog'
+          target: '#dialog',
         })) {
           const { players, scores, chips, chipRate } = createDefault()
           model.players = players
@@ -253,7 +271,7 @@ export default {
       },
     }
   },
-}
+})
 </script>
 
 <style scoped>

@@ -12,7 +12,8 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
+import { defineComponent, PropType } from 'vue'
 import { asyncRenderProps } from '@/utils/vue'
 import AlertOutlineIcon from 'vue-material-design-icons/AlertOutline.vue'
 import AlertOctagramIcon from 'vue-material-design-icons/AlertOctagram.vue'
@@ -21,7 +22,9 @@ import Flex from '@/components/atoms/Flex.vue'
 import Grid from '@/components/atoms/Grid.vue'
 import Label from '@/components/atoms/Label.vue'
 
-export default {
+type DialogType = 'warning' | 'error'
+
+export default defineComponent({
   // eslint-disable-next-line vue/multi-word-component-names
   name: 'Dialog',
   components: {
@@ -35,8 +38,8 @@ export default {
   props: {
     ...asyncRenderProps,
     type: {
-      type: String,
-      validator: v => ['warning', 'error'].includes(v),
+      type: String as PropType<DialogType>,
+      validator: (v: string) => ['warning', 'error'].includes(v),
     },
     message: {
       type: String,
@@ -47,7 +50,7 @@ export default {
       default: false,
     },
   },
-}
+})
 </script>
 
 <style scoped>

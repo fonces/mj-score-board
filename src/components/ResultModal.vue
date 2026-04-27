@@ -49,8 +49,8 @@
   </ModalBase>
 </template>
 
-<script>
-import { reactive, computed, ref } from 'vue'
+<script lang="ts">
+import { defineComponent, reactive, computed, ref, PropType } from 'vue'
 import { event } from 'vue-gtag'
 import { v4 as uuid } from 'uuid'
 import html2canvas from 'html2canvas'
@@ -65,7 +65,7 @@ import TextInput from '@/components/atoms/TextInput.vue'
 import FormGroup from '@/components/molecules/FormGroup.vue'
 import ModalBase from '@/components/molecules/ModalBase.vue'
 
-export default {
+export default defineComponent({
   name: 'ResultModal',
   components: {
     DownloadIcon,
@@ -81,15 +81,15 @@ export default {
   },
   props: {
     players: {
-      type: Array,
+      type: Array as PropType<string[]>,
       required: true,
     },
     scores: {
-      type: Array,
+      type: Array as PropType<number[][]>,
       required: true,
     },
     chips: {
-      type: Array,
+      type: Array as PropType<number[]>,
       required: true,
     },
     chipRate: {
@@ -97,6 +97,7 @@ export default {
       required: true,
     },
   },
+  emits: ['reset', 'close'],
   setup(props, { emit }) {
     const model = reactive({ rate: 50, chipRate: props.chipRate, fileName: '' })
     const editableRef = ref(false)
@@ -115,11 +116,11 @@ export default {
       onShare: () => {
         const url = new URL(location.pathname, location.href)
         url.searchParams.set('id', uuid())
-        url.searchParams.set('datetime', new Date().getTime())
-        url.searchParams.set('editable', editableRef.value)
-        url.searchParams.set('players', props.players)
-        url.searchParams.set('scores', props.scores)
-        url.searchParams.set('chips', props.chips)
+        url.searchParams.set('datetime', String(new Date().getTime()))
+        url.searchParams.set('editable', String(editableRef.value))
+        url.searchParams.set('players', String(props.players))
+        url.searchParams.set('scores', String(props.scores))
+        url.searchParams.set('chips', String(props.chips))
 
         if (typeof navigator.share === 'undefined') {
           if (navigator.clipboard) {
@@ -138,7 +139,8 @@ export default {
         event('share', { event_label: editableRef.value ? 'editable' : 'readonly' })
       },
       onDownload: async () => {
-        const node = document.querySelector('#app')
+        const node = document.querySelector('#app') as HTMLElement | null
+        if (!node) return
         try {
           node.classList.add('printing')
           const canvas = await html2canvas(node)
@@ -146,7 +148,7 @@ export default {
           link.download = `${model.fileName || new Date().toLocaleString()}.png`
           link.href = canvas.toDataURL('image/png')
           link.click()
-        } catch(e) {
+        } catch (e) {
           alert('画像の保存に失敗しました。')
         } finally {
           node.classList.remove('printing')
@@ -157,7 +159,7 @@ export default {
       onClose: () => emit('close'),
     }
   },
-}
+})
 </script>
 
 <style scoped>

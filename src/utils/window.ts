@@ -3,7 +3,7 @@ import { onBeforeMount, onUnmounted } from 'vue'
 /**
  * 画面高さを計算してvh変数に格納する
  */
-export const useFillViewHeight = () => {
+export const useFillViewHeight = (): void => {
   const events = ['resize', 'orientationchange']
   const setFillHeight = () => {
     const vh = window.innerHeight * 0.01

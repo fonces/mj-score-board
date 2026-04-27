@@ -25,8 +25,8 @@
   </ModalBase>
 </template>
 
-<script>
-import { reactive, computed, watch } from 'vue'
+<script lang="ts">
+import { defineComponent, reactive, computed, watch, PropType } from 'vue'
 import TrashIcon from 'vue-material-design-icons/TrashCanOutline.vue'
 import Button from '@/components/atoms/Button.vue'
 import Grid from '@/components/atoms/Grid.vue'
@@ -34,7 +34,7 @@ import TextInput from '@/components/atoms/TextInput.vue'
 import FormField from '@/components/atoms/FormField.vue'
 import ModalBase from '@/components/molecules/ModalBase.vue'
 
-export default {
+export default defineComponent({
   name: 'EditPlayerModal',
   components: {
     Button,
@@ -46,12 +46,13 @@ export default {
   },
   props: {
     players: {
-      type: Array,
+      type: Array as PropType<string[]>,
       required: true,
     },
   },
+  emits: ['save', 'close'],
   setup(props, { emit }) {
-    const model = reactive({
+    const model = reactive<{ players: string[]; deleted: number[] }>({
       players: [...props.players, ''],
       deleted: [],
     })
@@ -64,8 +65,8 @@ export default {
 
     return {
       model,
-      isLastIndex: i => i === lastIndexRef.value,
-      onDelete: i => (model.deleted = [...model.deleted, i]),
+      isLastIndex: (i: number) => i === lastIndexRef.value,
+      onDelete: (i: number) => (model.deleted = [...model.deleted, i]),
       onSave: () => emit('save', {
         players: 4 < model.players.length ? [...model.players].slice(0, -1) : [...model.players],
         deleted: [...model.deleted],
@@ -73,7 +74,7 @@ export default {
       onClose: () => emit('close'),
     }
   },
-}
+})
 </script>
 
 <style scoped>

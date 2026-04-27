@@ -4,14 +4,14 @@
   </div>
 </template>
 
-<script>
-import { computed } from 'vue'
+<script lang="ts">
+import { computed, defineComponent, PropType } from 'vue'
 
-export default {
+export default defineComponent({
   name: 'FormField',
   props: {
     columns: {
-      type: Array,
+      type: Array as PropType<string[]>,
       default: () => (['1fr', 'max-content']),
     },
   },
@@ -19,8 +19,8 @@ export default {
     return {
       gridTemplateColumns: computed(() => props.columns.join(' ')),
     }
-  }
-}
+  },
+})
 </script>
 
 <style>

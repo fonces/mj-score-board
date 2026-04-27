@@ -7,14 +7,16 @@
       :id="name"
       type='checkbox'
       :value="modelValue"
-      @input="$emit('update:modelValue', $event.target.checked)"
+      @input="$emit('update:modelValue', ($event.target as HTMLInputElement).checked)"
     />
     <label class="button" :for="name" />
   </div>
 </template>
 
-<script>
-export default {
+<script lang="ts">
+import { defineComponent } from 'vue'
+
+export default defineComponent({
   // eslint-disable-next-line vue/multi-word-component-names
   name: 'Switch',
   inheritAttrs: false,
@@ -29,7 +31,7 @@ export default {
       required: true,
     },
   },
-}
+})
 </script>
 
 <style scoped>

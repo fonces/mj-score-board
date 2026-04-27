@@ -33,8 +33,8 @@
   </ModalBase>
 </template>
 
-<script>
-import { reactive, computed } from 'vue'
+<script lang="ts">
+import { defineComponent, reactive, computed, PropType } from 'vue'
 import RestoreIcon from 'vue-material-design-icons/Restore.vue'
 import Button from '@/components/atoms/Button.vue'
 import FormField from '@/components/atoms/FormField.vue'
@@ -46,7 +46,7 @@ import FormGroup from '@/components/molecules/FormGroup.vue'
 import ModalBase from '@/components/molecules/ModalBase.vue'
 import { fill, sum } from '@/utils/array'
 
-export default {
+export default defineComponent({
   name: 'EditChipModal',
   components: {
     RestoreIcon,
@@ -61,11 +61,11 @@ export default {
   },
   props: {
     players: {
-      type: Array,
+      type: Array as PropType<string[]>,
       required: true,
     },
     chips: {
-      type: Array,
+      type: Array as PropType<number[]>,
       required: true,
     },
     chipRate: {
@@ -73,8 +73,9 @@ export default {
       required: true,
     },
   },
+  emits: ['save', 'close'],
   setup(props, { emit }) {
-    const model = reactive({
+    const model = reactive<{ chips: number[]; chipRate: number }>({
       chips: [...props.chips],
       chipRate: props.chipRate,
     })
@@ -83,16 +84,16 @@ export default {
     return {
       model,
       diff: diffRef,
-      onBlur: i => !Number.isInteger(model.chips[i]) && (model.chips[i] = 0),
+      onBlur: (i: number) => !Number.isInteger(model.chips[i]) && (model.chips[i] = 0),
       onBlurChipRate: () => (!Number.isInteger(model.chipRate) || model.chipRate % 1000 !== 0) && (model.chipRate = props.chipRate),
-      onAutoComplete: i => model.chips[i] -= diffRef.value,
+      onAutoComplete: (i: number) => model.chips[i] -= diffRef.value,
       onClear: () => {
-        model.chips = fill(props.players.length)
+        model.chips = fill<number>(props.players.length)
         model.chipRate = 5000
       },
       onSave: () => emit('save', { ...model, chips: [...model.chips] }),
       onClose: () => emit('close'),
     }
   },
-}
+})
 </script>
