@@ -13,25 +13,26 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { CSSProperties, defineComponent, PropType } from 'vue'
 
 export default defineComponent({
   // eslint-disable-next-line vue/multi-word-component-names
   name: 'Flex',
   props: {
     align: {
-      type: String,
+      type: String as PropType<CSSProperties['alignItems']>,
       default: 'center',
     },
     direction: {
-      type: String,
+      type: String as PropType<CSSProperties['flexDirection']>,
       default: 'row',
     },
     gap: {
-      type: String,
+      type: String as PropType<CSSProperties['gap']>,
+      default: '',
     },
     justify: {
-      type: String,
+      type: String as PropType<CSSProperties['justifyContent']>,
       default: 'space-between',
     },
   },

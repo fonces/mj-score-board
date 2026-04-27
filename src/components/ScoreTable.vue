@@ -107,7 +107,7 @@ type ModalState = {
   score: boolean
   chip: boolean
   result: boolean
-  scoreIndex: number | null
+  scoreIndex: number
 }
 
 const createDefault = (): Model => ({
@@ -141,7 +141,7 @@ export default defineComponent({
       score: false,
       chip: false,
       result: false,
-      scoreIndex: null,
+      scoreIndex: 0,
     })
     const isEditableRef = ref(true)
 
@@ -241,10 +241,7 @@ export default defineComponent({
         modal.player = false
       },
       onSaveEditScore: ({ score }: { score: number[] }) => {
-        if (modal.scoreIndex !== null) {
-          model.scores[modal.scoreIndex] = score
-        }
-        modal.scoreIndex = null
+        model.scores[modal.scoreIndex] = score
         modal.score = false
       },
       onSaveEditChip: ({ chips, chipRate }: { chips: number[]; chipRate: number }) => {
