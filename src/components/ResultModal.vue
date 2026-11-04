@@ -58,7 +58,7 @@
 </template>
 
 <script setup lang="ts">
-import { reactive, computed, ref } from 'vue'
+import { reactive, computed, ref, onMounted } from 'vue'
 import DownloadIcon from 'vue-material-design-icons/Download.vue'
 import HistoryIcon from 'vue-material-design-icons/History.vue'
 import ShareIcon from 'vue-material-design-icons/Share.vue'
@@ -71,6 +71,15 @@ import TextInput from '@/components/atoms/TextInput.vue'
 import FormGroup from '@/components/molecules/FormGroup.vue'
 import ModalBase from '@/components/molecules/ModalBase.vue'
 import Dialog from '@/components/molecules/Dialog.vue'
+import ImageSaveDialog from '@/components/molecules/ImageSaveDialog.vue'
+import {
+  canvasToPngFile,
+  downloadUrl,
+  preloadHtml2canvas,
+  renderToCanvas,
+  toSafeFileName,
+} from '@/utils/image'
+import { getPlatform } from '@/utils/pwa'
 import { asyncRender } from '@/utils/vue'
 import { useStore } from '@/store'
 
@@ -132,25 +141,39 @@ const onShare = async () => {
   event('share', { event_label: editable.value ? 'editable' : 'readonly' })
 }
 
+const capture = async (node: HTMLElement) => {
+  node.classList.add('printing')
+  try {
+    return await renderToCanvas(node)
+  } finally {
+    node.classList.remove('printing')
+  }
+}
+
 const onDownload = async () => {
   const node = document.querySelector('#app') as HTMLElement | null
   if (!node) return
+  const fileName = toSafeFileName(`${model.fileName || new Date().toLocaleString()}.png`)
   try {
-    node.classList.add('printing')
-    const { default: html2canvas } = await import('html2canvas')
-    const canvas = await html2canvas(node)
-    const link = document.createElement('a')
-    link.download = `${model.fileName || new Date().toLocaleString()}.png`
-    link.href = canvas.toDataURL('image/png')
-    link.click()
+    const canvas = await capture(node)
+    if (getPlatform() === 'ios') {
+      // iOS では画像生成の待ち時間でタップ操作の扱いが切れ、a[download] が無視される。
+      // ホーム画面から起動した場合はそもそもダウンロードできないため、
+      // プレビューを表示し、改めて「保存」をタップしてもらって共有メニューから保存する。
+      const file = await canvasToPngFile(canvas, fileName)
+      await asyncRender<void>(ImageSaveDialog, { props: { file }, target: '#dialog' })
+    } else {
+      downloadUrl(canvas.toDataURL('image/png'), fileName)
+    }
   } catch (e) {
     alert('画像の保存に失敗しました。')
   } finally {
-    node.classList.remove('printing')
     const { event } = await import('vue-gtag')
     event('export-image')
   }
 }
+
+onMounted(preloadHtml2canvas)
 
 const onStartNewGame = async () => {
   if (await asyncRender<boolean>(Dialog, {
